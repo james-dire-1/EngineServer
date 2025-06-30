@@ -1,0 +1,25 @@
+package templates.common.networking;
+
+import java.io.Serializable;
+
+// TODO: 2024-07-07 Does this need to implement Serializable?
+public enum PacketType implements Serializable {
+    // Server to client
+    LEVEL_IS_READY,
+    PHYSICAL_OBJECT_ADDED_TO_LEVEL,
+    PHYSICAL_OBJECT_MOVED,
+    PHYSICAL_OBJECT_ROTATED,
+    PHYSICAL_OBJECT_SCALED,
+    PHYSICAL_OBJECT_TRANSFORM_CHANGED,
+    AABB_HITBOX_ADDED,
+    CONNECTED_PLAYER_ADDED,
+    CONNECTED_PLAYER_TRANSFORM_CHANGED,
+    CONNECTED_PLAYER_LEFT,
+    LEVEL_SECONDS_PER_GAME_TICK_CHANGED,
+    LEVEL_GRAVITY_CHANGED,
+
+    // Client to server
+    PLAYER_JOINED,
+    PLAYER_MOVED,
+    LEVEL_CHANGE_PAUSE_STATE
+}
