@@ -11,6 +11,10 @@ import newStuff.Window;
 
 import java.io.IOException;
 
+/*
+This is for testing!
+ */
+
 public class Main {
 
     private static final int PORT = 6789;
