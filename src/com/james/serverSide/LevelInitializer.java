@@ -55,7 +55,7 @@ public class LevelInitializer implements Runnable {
         PhysicalObject testEnvironment = new PhysicalObject(PhysicalObjectType.TestEnvironment, new Vector3f(), new Vector3f(), 1);
         level.add(testEnvironment);
 
-        AABBHitbox aabbHitbox = new AABBHitbox(testEnvironment, "res/test_environment_7.dae");
+        AABBHitbox aabbHitbox = new AABBHitbox(testEnvironment, "/test-environment.dae");
         level.addAABBHitbox(aabbHitbox);
 
         MovableObject abstractArt = new MovableObject(level, PhysicalObjectType.Other, new Vector3f(0, 5, 0), new Vector3f(), 1) {

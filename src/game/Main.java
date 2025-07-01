@@ -11,18 +11,14 @@ import newStuff.Window;
 
 import java.io.IOException;
 
-/*
-This is for testing!
- */
-
 public class Main {
 
     private static final int PORT = 6789;
 
     public static void main(String[] args) {
-        ModelLoader.init("res/stall.obj", "res/abstract_art.dae", "res/one-sided-wall5.dae", "res/test_environment_7.dae");
+        ModelLoader.init("/stall.obj", "/abstract-art.dae", "/one-sided-wall.dae", "/test-environment.dae");
 
-        ModelMeshBankInR3.init("res/one-sided-wall5.dae", "res/test_environment_7.dae");
+        ModelMeshBankInR3.init("/one-sided-wall.dae", "/test-environment.dae");
         EllipsoidDimensions.init( new float[][]{ { 1, 1, 1 }, { 0.5f, 3, 0.5f } } );
 
         Window window = new Window("Game Server");

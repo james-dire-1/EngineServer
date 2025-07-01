@@ -2,6 +2,7 @@ package com.james.common.tools;
 
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.assimp.*;
+import templates.common.GlobalConstants;
 
 import java.nio.IntBuffer;
 import java.util.ArrayList;
@@ -20,7 +21,8 @@ public class ModelLoader {
     public int[] indices;
 
     private ModelLoader(String path) {
-        AIScene scene = aiImportFile(path,aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices);
+        String fullPath = GlobalConstants.MODELS_BASE_DIRECTORY + path;
+        AIScene scene = aiImportFile(fullPath,aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices);
 //        AIScene scene = aiImportFileEx(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices, AIFileIO.create());
 
         if (scene == null) {
