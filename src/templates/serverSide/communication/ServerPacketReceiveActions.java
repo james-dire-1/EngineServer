@@ -15,16 +15,24 @@ import static templates.common.GlobalConstants.IS_NETWORK_DEBUG;
  */
 public class ServerPacketReceiveActions {
 
+    public static void playerUsernameReceived(ServerProperties serverProperties, String username) {
+        if (IS_NETWORK_DEBUG) System.out.println("ServerPacketReceiveActions.playerUsernameReceived");
+
+        PlayerInfo playerInfo = new PlayerInfo(username);
+        serverProperties.assignPlayerInfo(playerInfo);
+
+        Level startLevel = Level.getByName("main");
+        startLevel.events.notifyUsernameSuccess(playerInfo);
+    }
+
     // TODO: 2024-06-27 Make the server decide where the player should be placed initially
-    public static void playerJoinedReceived(ServerProperties serverProperties, float x, float y, float z, float rotY) {
+    public static void playerJoinedReceived(PlayerInfo playerInfo, float x, float y, float z, float rotY) {
         if (IS_NETWORK_DEBUG) System.out.println("ServerPacketReceiveActions.playerJoinedReceived");
 
         Level startLevel = Level.getByName("main");
-        PlayerInfo playerInfo = new PlayerInfo(startLevel);
+        playerInfo.level = startLevel;
         ConnectedPlayer connectedPlayer = new ConnectedPlayer(new Vector3f(x, y, z), new Vector3f(0, rotY, 0));
         startLevel.addConnectedPlayer(playerInfo, connectedPlayer);
-
-        serverProperties.assignPlayerInfo(playerInfo);
 
         for (PhysicalObject obj : startLevel.getPhysicalObjects()) {
             startLevel.events.sendPhysicalObjectAddedToLevel(obj.id, obj.type, obj.getPosition(), obj.getRotation(), obj.getScale(), playerInfo);

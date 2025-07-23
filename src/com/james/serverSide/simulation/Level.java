@@ -117,6 +117,11 @@ public class Level extends LevelProperties {
         return connectedPlayersMap.get(playerInfo);
     }
 
+    // TODO: 2025-07-23 Continue from here... 
+    public Set<PlayerInfo> getAllPlayerInfo() {
+        return connectedPlayersMap.keySet();
+    }
+
     private final List<PhysicalObject> objectsToAdd = new ArrayList<>();
     public void add(PhysicalObject obj) {
         physicalObjects.add(obj);

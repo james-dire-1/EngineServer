@@ -17,10 +17,11 @@ public class PlayerInfo {
     private ConnectedClient connectedClient;
     public ConnectedClient getConnectedClient() { return connectedClient; }
 
+    public final String username;
     public Level level;
 
-    public PlayerInfo(Level level) {
-        this.level = level;
+    public PlayerInfo(String username) {
+        this.username = username;
     }
 
     public void setConnectedClient(ConnectedClient connectedClient) {

@@ -28,10 +28,29 @@ public class OnlineServerProperties implements ServerProperties {
     public static void onConnectedClientAdded(ConnectedClient connectedClient) {
         Window.get().println("A client has connected to the server.");
 
+        connectedClient.setReadListener(PacketType.PLAYER_USERNAME, OnlineServerProperties::playerUsernameReceived);
         connectedClient.setReadListener(PacketType.PLAYER_JOINED, OnlineServerProperties::playerJoinedReceived);
         connectedClient.setReadListener(PacketType.PLAYER_MOVED, OnlineServerProperties::playerMovedReceived);
         connectedClient.setReadListener(PacketType.LEVEL_CHANGE_PAUSE_STATE, OnlineServerProperties::changePauseStateReceived);
         connectedClient.setDisconnectListener(OnlineServerProperties::onClientDisconnect);
+
+        Level startLevel = Level.getByName("main");
+        // TODO: 2025-07-23 Not running this on a Level thread might be the culprit for "malformed UTF"!
+        ServerThreadManager.executeOnALevelThread(Level.getByName("main"), () -> {
+            startLevel.events.sendUsernamePrompt(connectedClient);
+        });
+    }
+
+    private static void playerUsernameReceived(ConnectedClient connectedClient, Object[] objects) {
+        String username = (String) objects[0];
+
+        OnlineServerProperties properties = new OnlineServerProperties();
+        // TODO: 2024-07-07 does it matter whether this is done on this thread or on the level thread?
+        mostRecentConnectedClient = connectedClient;
+
+        ServerThreadManager.executeOnALevelThread(Level.getByName("main"), () -> {
+            ServerPacketReceiveActions.playerUsernameReceived(properties, username);
+        });
     }
 
     private static void playerJoinedReceived(ConnectedClient connectedClient, Object[] objects) {
@@ -42,12 +61,10 @@ public class OnlineServerProperties implements ServerProperties {
         float z = (float) objects[2];
         float rotY = (float) objects[3];
 
-        OnlineServerProperties properties = new OnlineServerProperties();
-        // TODO: 2024-07-07 does it matter whether this is done on this thread or on the level thread?
-        mostRecentConnectedClient = connectedClient;
+        PlayerInfo playerInfo = getPlayerInfo(connectedClient);
 
         ServerThreadManager.executeOnALevelThread(Level.getByName("main"), () -> {
-            ServerPacketReceiveActions.playerJoinedReceived(properties, x, y, z, rotY);
+            ServerPacketReceiveActions.playerJoinedReceived(playerInfo, x, y, z, rotY);
         });
     }
 

@@ -5,6 +5,8 @@ import java.io.Serializable;
 // TODO: 2024-07-07 Does this need to implement Serializable?
 public enum PacketType implements Serializable {
     // Server to client
+    USERNAME_PROMPT,
+    USERNAME_SUCCESS,
     LEVEL_IS_READY,
     PHYSICAL_OBJECT_ADDED_TO_LEVEL,
     PHYSICAL_OBJECT_MOVED,
@@ -19,6 +21,7 @@ public enum PacketType implements Serializable {
     LEVEL_GRAVITY_CHANGED,
 
     // Client to server
+    PLAYER_USERNAME,
     PLAYER_JOINED,
     PLAYER_MOVED,
     LEVEL_CHANGE_PAUSE_STATE

@@ -13,6 +13,22 @@ import static newStuff.Logger.log;
 
 public class OnlineServerPacketSendEvents implements ServerPacketSendEvents {
 
+    @Override
+    public void sendUsernamePrompt(ConnectedClient connectedClient) {
+        if (IS_NETWORK_DEBUG) log("OnlineServerPacketSendEvents.promptUsername");
+
+        Packet packet = new Packet(PacketType.USERNAME_PROMPT, (Object[]) null);
+        connectedClient.sendPacket(packet);
+    }
+
+    @Override
+    public void notifyUsernameSuccess(PlayerInfo playerInfo) {
+        if (IS_NETWORK_DEBUG) log("OnlineServerPacketSendEvents.notifyUsernameSuccess");
+
+        Packet packet = new Packet(PacketType.USERNAME_SUCCESS, (Object[]) null);
+        playerInfo.getConnectedClient().sendPacket(packet);
+    }
+
     // TODO: 2024-07-11 In the future, all calls to Server.get().sendToAllClients() should be replaced
     // TODO: 2024-07-11 since only players of that specific level should receive the data
     @Override
