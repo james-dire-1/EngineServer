@@ -35,6 +35,7 @@ public class CollisionHandler {
     public void update() {
         for (EllipsoidHitbox ellipsoidHitbox : ellipsoidHitboxes) {
             MovableObject movableObject = ellipsoidHitbox.movableObject;
+
             if (movableObject.isAffectedByAABBCollisions) {
                 prevPosition.set(movableObject.getPosition());
 

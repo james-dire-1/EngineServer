@@ -34,6 +34,7 @@ public class Level extends LevelProperties {
     private final List<ServerThreadManager.Action> actionsCopied = new ArrayList<>();
 
     private final Vector3f prevPosition = new Vector3f();
+    private final Vector3f prevRotation = new Vector3f();
 
     public Level(String name, ServerPacketSendEvents events) {
         this.events = events;
@@ -85,14 +86,22 @@ public class Level extends LevelProperties {
             }
             collisionHandler.update();
 
-            // Other logic other than move
+            // Other logic other than move (including rotations!)
             Iterator<PhysicalObject> iterator = physicalObjects.iterator();
             while (iterator.hasNext()) {
                 PhysicalObject obj = iterator.next();
 
+                prevRotation.set(obj.getRotation());
                 boolean shouldDelete = obj.update();
+
                 if (shouldDelete) {
+                    // TODO: 2025-07-02 At the moment, we don't have a way of removing PhysicalObjects client side
                     iterator.remove();
+                } else {
+                    Vector3f newRotation = obj.getRotation();
+                    if (!newRotation.equals(prevRotation)) {
+                        events.sendPhysicalObjectRotated(obj.id, newRotation.x, newRotation.y, newRotation.z);
+                    }
                 }
             }
 
@@ -117,7 +126,7 @@ public class Level extends LevelProperties {
         return connectedPlayersMap.get(playerInfo);
     }
 
-    // TODO: 2025-07-23 Continue from here (replace Server.get().sendToAllClients())
+    // TODO: 2025-07-23 Continue from here (replace Server.get().sendToAllClients()) - this is from server code
     public Set<PlayerInfo> getAllPlayerInfo() {
         return connectedPlayersMap.keySet();
     }

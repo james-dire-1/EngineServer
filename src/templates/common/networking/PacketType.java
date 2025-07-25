@@ -2,7 +2,6 @@ package templates.common.networking;
 
 import java.io.Serializable;
 
-// TODO: 2024-07-07 Does this need to implement Serializable?
 public enum PacketType implements Serializable {
     // Server to client
     USERNAME_PROMPT,

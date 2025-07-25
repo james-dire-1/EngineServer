@@ -5,7 +5,6 @@ import com.james.serverSide.simulation.Level;
 import com.james.serverSide.simulation.collisionEngine.hitboxes.AABBHitbox;
 import com.james.serverSide.simulation.objects.ConnectedPlayer;
 import com.james.serverSide.simulation.objects.PhysicalObject;
-import newStuff.ConnectedClient;
 import org.lwjgl.util.vector.Vector3f;
 
 import static templates.common.GlobalConstants.IS_DETAILED_NETWORK_DEBUG;
@@ -77,6 +76,8 @@ public class ServerPacketReceiveActions {
     }
 
     public static void playerLeftReceived(PlayerInfo playerInfo) {
+        if (IS_NETWORK_DEBUG) System.out.println("ServerPacketReceiveActions.playerLeftReceived");
+
         Level playerLevel = playerInfo.level;
         ConnectedPlayer connectedPlayer = playerLevel.removeConnectedPlayer(playerInfo);
 

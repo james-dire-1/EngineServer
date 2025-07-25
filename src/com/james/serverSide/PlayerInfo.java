@@ -14,11 +14,11 @@ import templates.serverSide.communication.ServerPacketReceiveActions;
  */
 public class PlayerInfo {
 
-    private ConnectedClient connectedClient;
-    public ConnectedClient getConnectedClient() { return connectedClient; }
-
     public String username;
     public Level level;
+
+    private ConnectedClient connectedClient;
+    public ConnectedClient getConnectedClient() { return connectedClient; }
 
     public void setConnectedClient(ConnectedClient connectedClient) {
         this.connectedClient = connectedClient;

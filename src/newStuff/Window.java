@@ -5,11 +5,10 @@ import java.awt.*;
 
 public class Window {
 
-    private final JFrame frame;
     private final JTextArea messageHistory;
 
     public Window(String title) {
-        this.frame = new JFrame(title);
+        JFrame frame = new JFrame(title);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         this.messageHistory = new JTextArea();
