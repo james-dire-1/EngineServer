@@ -14,11 +14,11 @@ import static newStuff.Logger.log;
 public class OnlineServerPacketSendEvents implements ServerPacketSendEvents {
 
     @Override
-    public void sendUsernamePrompt(ConnectedClient connectedClient) {
+    public void sendUsernamePrompt(PlayerInfo playerInfo) {
         if (IS_NETWORK_DEBUG) log("OnlineServerPacketSendEvents.promptUsername");
 
         Packet packet = new Packet(PacketType.USERNAME_PROMPT, (Object[]) null);
-        connectedClient.sendPacket(packet);
+        playerInfo.getConnectedClient().sendPacket(packet);
     }
 
     @Override

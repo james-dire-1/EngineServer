@@ -1,1 +1,4 @@
 // TODO: 2024-07-11 Shouldn't removing connected clients be more general? [ConnectedClient]
+
+// TODO: 2025-07-23 Not running this on a Level thread might be the culprit for "malformed UTF"!
+[OnlineServerProperties]

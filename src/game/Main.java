@@ -28,7 +28,7 @@ public class Main {
 
             try {
                 Server server = new Server(PORT);
-                server.setConnectedClientAddedListener(OnlineServerProperties::onConnectedClientAdded);
+                server.setConnectedClientAddedListener(OnlineServerProperties::clientJoined);
 
                 window.println("Server successfully set up on port " + PORT);
 

@@ -5,6 +5,7 @@ import com.james.serverSide.simulation.Level;
 import com.james.serverSide.simulation.collisionEngine.hitboxes.AABBHitbox;
 import com.james.serverSide.simulation.objects.ConnectedPlayer;
 import com.james.serverSide.simulation.objects.PhysicalObject;
+import newStuff.ConnectedClient;
 import org.lwjgl.util.vector.Vector3f;
 
 import static templates.common.GlobalConstants.IS_DETAILED_NETWORK_DEBUG;
@@ -15,11 +16,20 @@ import static templates.common.GlobalConstants.IS_NETWORK_DEBUG;
  */
 public class ServerPacketReceiveActions {
 
-    public static void playerUsernameReceived(ServerProperties serverProperties, String username) {
+    public static void clientJoined(ServerProperties serverProperties) {
+        if (IS_NETWORK_DEBUG) System.out.println("ServerPacketReceiveActions.clientJoined");
+
+        PlayerInfo playerInfo = new PlayerInfo();
+        serverProperties.assignPlayerInfo(playerInfo);
+
+        Level startLevel = Level.getByName("main");
+        startLevel.events.sendUsernamePrompt(playerInfo);
+    }
+
+    public static void playerUsernameReceived(PlayerInfo playerInfo, String username) {
         if (IS_NETWORK_DEBUG) System.out.println("ServerPacketReceiveActions.playerUsernameReceived");
 
-        PlayerInfo playerInfo = new PlayerInfo(username);
-        serverProperties.assignPlayerInfo(playerInfo);
+        playerInfo.username = username;
 
         Level startLevel = Level.getByName("main");
         startLevel.events.notifyUsernameSuccess(playerInfo);

@@ -117,7 +117,7 @@ public class Level extends LevelProperties {
         return connectedPlayersMap.get(playerInfo);
     }
 
-    // TODO: 2025-07-23 Continue from here... 
+    // TODO: 2025-07-23 Continue from here (replace Server.get().sendToAllClients())
     public Set<PlayerInfo> getAllPlayerInfo() {
         return connectedPlayersMap.keySet();
     }
