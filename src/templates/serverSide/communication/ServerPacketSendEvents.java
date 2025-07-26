@@ -12,7 +12,7 @@ import org.lwjgl.util.vector.Vector3f;
 public interface ServerPacketSendEvents {
 
     void sendUsernamePrompt(PlayerInfo playerInfo);
-    void notifyUsernameSuccess(PlayerInfo playerInfo);
+    void notifyUsernameSuccess(PlayerInfo playerInfo, String username, int color);
     void notifyThatLevelIsReady(PlayerInfo playerInfo);
     void sendPhysicalObjectAddedToLevel(int id, PhysicalObjectType type, Vector3f position, Vector3f rotation, float scale, PlayerInfo... playerInfoArray);
     void sendPhysicalObjectMoved(int id, float x, float y, float z);
@@ -20,7 +20,7 @@ public interface ServerPacketSendEvents {
     void sendPhysicalObjectScaled(int id, float scale);
     void sendPhysicalObjectTransformChanged(int id, Vector3f position, Vector3f rotation, float scale);
     void sendAABBHitboxAdded(int id, String meshPath, PlayerInfo... playerInfoArray);
-    void sendConnectedPlayerAdded(int id, String username, float x, float y, float z, float rotY, PlayerInfo playerInfo);
+    void sendConnectedPlayerAdded(int id, String username, int color, float x, float y, float z, float rotY, PlayerInfo playerInfo);
     void sendConnectedPlayerTransformChanged(int id, float x, float y, float z, float rotY, PlayerInfo exceptPlayerInfo);
     void sendConnectedPlayerLeft(int id, PlayerInfo exceptPlayerInfo);
     void sendLevelSecondsPerGameTickChanged(float secondsPerGameTick);

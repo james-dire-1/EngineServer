@@ -5,6 +5,7 @@ import com.james.serverSide.simulation.Level;
 import com.james.serverSide.simulation.collisionEngine.hitboxes.AABBHitbox;
 import com.james.serverSide.simulation.objects.ConnectedPlayer;
 import com.james.serverSide.simulation.objects.PhysicalObject;
+import newStuff.PlayerColors;
 import org.lwjgl.util.vector.Vector3f;
 
 import static templates.common.GlobalConstants.IS_DETAILED_NETWORK_DEBUG;
@@ -19,6 +20,7 @@ public class ServerPacketReceiveActions {
         if (IS_NETWORK_DEBUG) System.out.println("ServerPacketReceiveActions.clientJoined");
 
         PlayerInfo playerInfo = new PlayerInfo();
+        playerInfo.color = PlayerColors.getNextAvailableColor();
         serverProperties.assignPlayerInfo(playerInfo);
 
         Level startLevel = Level.getByName("main");
@@ -31,7 +33,7 @@ public class ServerPacketReceiveActions {
         playerInfo.username = username;
 
         Level startLevel = Level.getByName("main");
-        startLevel.events.notifyUsernameSuccess(playerInfo);
+        startLevel.events.notifyUsernameSuccess(playerInfo, playerInfo.username, playerInfo.color);
     }
 
     // TODO: 2024-06-27 Make the server decide where the player should be placed initially
@@ -57,12 +59,12 @@ public class ServerPacketReceiveActions {
             // Send other ConnectedPlayer's info to the newly joined ConnectedPlayer
             Vector3f otherPosition = otherConnectedPlayer.getPosition();
             float otherRotY = otherConnectedPlayer.getRotation().y;
-            startLevel.events.sendConnectedPlayerAdded(otherConnectedPlayer.id, otherPlayerInfo.username, otherPosition.x, otherPosition.y, otherPosition.z, otherRotY, playerInfo);
+            startLevel.events.sendConnectedPlayerAdded(otherConnectedPlayer.id, otherPlayerInfo.username, otherPlayerInfo.color, otherPosition.x, otherPosition.y, otherPosition.z, otherRotY, playerInfo);
 
             // Send newly joined ConnectedPlayer's info to the other ConnectedPlayer
             Vector3f joinedPosition = connectedPlayer.getPosition();
             float joinedRotY = connectedPlayer.getRotation().y;
-            startLevel.events.sendConnectedPlayerAdded(connectedPlayer.id, playerInfo.username, joinedPosition.x, joinedPosition.y, joinedPosition.z, joinedRotY, otherPlayerInfo);
+            startLevel.events.sendConnectedPlayerAdded(connectedPlayer.id, playerInfo.username, playerInfo.color, joinedPosition.x, joinedPosition.y, joinedPosition.z, joinedRotY, otherPlayerInfo);
         }
         startLevel.events.notifyThatLevelIsReady(playerInfo);
     }
@@ -80,6 +82,7 @@ public class ServerPacketReceiveActions {
 
         Level playerLevel = playerInfo.level;
         ConnectedPlayer connectedPlayer = playerLevel.removeConnectedPlayer(playerInfo);
+        PlayerColors.freeColor(playerInfo.color);
 
         playerLevel.events.sendConnectedPlayerLeft(connectedPlayer.id, playerInfo);
     }

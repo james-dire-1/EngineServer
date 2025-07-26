@@ -22,10 +22,12 @@ public class OnlineServerPacketSendEvents implements ServerPacketSendEvents {
     }
 
     @Override
-    public void notifyUsernameSuccess(PlayerInfo playerInfo) {
+    public void notifyUsernameSuccess(PlayerInfo playerInfo, String username, int color) {
         if (IS_NETWORK_DEBUG) log("OnlineServerPacketSendEvents.notifyUsernameSuccess");
 
-        Packet packet = new Packet(PacketType.USERNAME_SUCCESS, (Object[]) null);
+        Object[] objects = { username, color };
+
+        Packet packet = new Packet(PacketType.USERNAME_SUCCESS, objects);
         playerInfo.getConnectedClient().sendPacket(packet);
     }
 
@@ -100,10 +102,10 @@ public class OnlineServerPacketSendEvents implements ServerPacketSendEvents {
     }
 
     @Override
-    public void sendConnectedPlayerAdded(int id, String username, float x, float y, float z, float rotY, PlayerInfo playerInfo) {
+    public void sendConnectedPlayerAdded(int id, String username, int color, float x, float y, float z, float rotY, PlayerInfo playerInfo) {
         if (IS_NETWORK_DEBUG) log("OnlineServerPacketSendEvents.sendConnectedPlayerAdded " + "{id=" + id + "} to {id=" + playerInfo.getConnectedPlayer().id + "}");
 
-        Object[] objects = { id, username, x, y, z, rotY };
+        Object[] objects = { id, username, color, x, y, z, rotY };
 
         Packet packet = new Packet(PacketType.CONNECTED_PLAYER_ADDED, objects);
         sendToGivenPlayers(packet, playerInfo);
