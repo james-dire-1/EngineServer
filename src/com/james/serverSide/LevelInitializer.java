@@ -26,7 +26,7 @@ public class LevelInitializer implements Runnable {
     private final Level level;
 
     public LevelInitializer(String levelName, ServerPacketSendEvents events) {
-        LevelInitializer.lastInstance = this;
+        lastInstance = this;
 
         this.level = new Level(levelName, events);
         this.thread = new Thread(this);

@@ -100,10 +100,10 @@ public class OnlineServerPacketSendEvents implements ServerPacketSendEvents {
     }
 
     @Override
-    public void sendConnectedPlayerAdded(int id, float x, float y, float z, float rotY, PlayerInfo playerInfo) {
+    public void sendConnectedPlayerAdded(int id, String username, float x, float y, float z, float rotY, PlayerInfo playerInfo) {
         if (IS_NETWORK_DEBUG) log("OnlineServerPacketSendEvents.sendConnectedPlayerAdded " + "{id=" + id + "} to {id=" + playerInfo.getConnectedPlayer().id + "}");
 
-        Object[] objects = { id, x, y, z, rotY };
+        Object[] objects = { id, username, x, y, z, rotY };
 
         Packet packet = new Packet(PacketType.CONNECTED_PLAYER_ADDED, objects);
         sendToGivenPlayers(packet, playerInfo);
@@ -147,6 +147,26 @@ public class OnlineServerPacketSendEvents implements ServerPacketSendEvents {
 
         Packet packet = new Packet(PacketType.LEVEL_GRAVITY_CHANGED, objects);
         Server.get().sendToAllClients(packet);
+    }
+
+    @Override
+    public void confirmChatMessageReception(PlayerInfo playerInfo, int localMessageId) {
+        if (IS_NETWORK_DEBUG) log("OnlineServerPacketSendEvents.confirmChatMessageReception");
+
+        Object[] objects = { localMessageId };
+
+        Packet packet = new Packet(PacketType.CONFIRM_CHAT_MESSAGE_RECEPTION, objects);
+        playerInfo.getConnectedClient().sendPacket(packet);
+    }
+
+    @Override
+    public void broadcastChatMessage(int playerId, String message, PlayerInfo exceptPlayerInfo) {
+        if (IS_NETWORK_DEBUG) log("OnlineServerPacketSendEvents.broadcastChatMessage");
+
+        Object[] objects = { playerId, message };
+
+        Packet packet = new Packet(PacketType.BROADCASTING_CHAT_MESSAGE, objects);
+        Server.get().sendToAllOtherClientsExcept(exceptPlayerInfo.getConnectedClient(), packet);
     }
 
     private void sendToGivenPlayers(Packet packet, PlayerInfo... playerInfoArray) {

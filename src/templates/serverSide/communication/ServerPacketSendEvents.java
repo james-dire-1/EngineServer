@@ -20,10 +20,12 @@ public interface ServerPacketSendEvents {
     void sendPhysicalObjectScaled(int id, float scale);
     void sendPhysicalObjectTransformChanged(int id, Vector3f position, Vector3f rotation, float scale);
     void sendAABBHitboxAdded(int id, String meshPath, PlayerInfo... playerInfoArray);
-    void sendConnectedPlayerAdded(int id, float x, float y, float z, float rotY, PlayerInfo playerInfo);
+    void sendConnectedPlayerAdded(int id, String username, float x, float y, float z, float rotY, PlayerInfo playerInfo);
     void sendConnectedPlayerTransformChanged(int id, float x, float y, float z, float rotY, PlayerInfo exceptPlayerInfo);
     void sendConnectedPlayerLeft(int id, PlayerInfo exceptPlayerInfo);
     void sendLevelSecondsPerGameTickChanged(float secondsPerGameTick);
     void sendLevelGravityChanged(float x, float y, float z);
+    void confirmChatMessageReception(PlayerInfo playerInfo, int localMessageId);
+    void broadcastChatMessage(int playerId, String message, PlayerInfo exceptPlayerInfo);
 
 }

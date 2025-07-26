@@ -57,12 +57,12 @@ public class ServerPacketReceiveActions {
             // Send other ConnectedPlayer's info to the newly joined ConnectedPlayer
             Vector3f otherPosition = otherConnectedPlayer.getPosition();
             float otherRotY = otherConnectedPlayer.getRotation().y;
-            startLevel.events.sendConnectedPlayerAdded(otherConnectedPlayer.id, otherPosition.x, otherPosition.y, otherPosition.z, otherRotY, playerInfo);
+            startLevel.events.sendConnectedPlayerAdded(otherConnectedPlayer.id, otherPlayerInfo.username, otherPosition.x, otherPosition.y, otherPosition.z, otherRotY, playerInfo);
 
             // Send newly joined ConnectedPlayer's info to the other ConnectedPlayer
             Vector3f joinedPosition = connectedPlayer.getPosition();
             float joinedRotY = connectedPlayer.getRotation().y;
-            startLevel.events.sendConnectedPlayerAdded(connectedPlayer.id, joinedPosition.x, joinedPosition.y, joinedPosition.z, joinedRotY, otherPlayerInfo);
+            startLevel.events.sendConnectedPlayerAdded(connectedPlayer.id, playerInfo.username, joinedPosition.x, joinedPosition.y, joinedPosition.z, joinedRotY, otherPlayerInfo);
         }
         startLevel.events.notifyThatLevelIsReady(playerInfo);
     }
@@ -88,6 +88,17 @@ public class ServerPacketReceiveActions {
         if (IS_NETWORK_DEBUG) System.out.println("ServerPacketReceiveActions.changePauseStateReceived " + "{shouldPause=" + shouldPause + "}");
 
         playerInfo.level.isPaused = shouldPause;
+    }
+
+    public static void chatMessageReceived(PlayerInfo playerInfo, int localMessageId, String message) {
+        if (IS_NETWORK_DEBUG) System.out.println("ServerPacketReceiveActions.chatMessageReceived");
+
+        Level playerLevel = playerInfo.level;
+
+        playerLevel.events.confirmChatMessageReception(playerInfo, localMessageId);
+
+        int playerId = playerInfo.getConnectedPlayer().id;
+        playerLevel.events.broadcastChatMessage(playerId, message, playerInfo);
     }
 
 }

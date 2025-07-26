@@ -32,6 +32,7 @@ public class OnlineServerProperties implements ServerProperties {
         connectedClient.setReadListener(PacketType.PLAYER_JOINED, OnlineServerProperties::playerJoinedReceived);
         connectedClient.setReadListener(PacketType.PLAYER_MOVED, OnlineServerProperties::playerMovedReceived);
         connectedClient.setReadListener(PacketType.LEVEL_CHANGE_PAUSE_STATE, OnlineServerProperties::changePauseStateReceived);
+        connectedClient.setReadListener(PacketType.CHAT_MESSAGE, OnlineServerProperties::chatMessageReceived);
         connectedClient.setDisconnectListener(OnlineServerProperties::onClientDisconnect);
 
         OnlineServerProperties serverProperties = new OnlineServerProperties();
@@ -89,6 +90,17 @@ public class OnlineServerProperties implements ServerProperties {
 
         ServerThreadManager.executeOnALevelThread(playerInfo.level, () -> {
             ServerPacketReceiveActions.changePauseStateReceived(playerInfo, shouldPause);
+        });
+    }
+
+    private static void chatMessageReceived(ConnectedClient connectedClient, Object[] objects) {
+        int localMessageId = (int) objects[0];
+        String message = (String) objects[1];
+
+        PlayerInfo playerInfo = getPlayerInfo(connectedClient);
+
+        ServerThreadManager.executeOnALevelThread(playerInfo.level, () -> {
+            ServerPacketReceiveActions.chatMessageReceived(playerInfo, localMessageId, message);
         });
     }
 
