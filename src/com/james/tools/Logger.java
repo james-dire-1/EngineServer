@@ -1,5 +1,6 @@
-package newStuff;
+package com.james.tools;
 
+import com.james.window.Window;
 import templates.common.GlobalConstants;
 
 public class Logger {

@@ -1,4 +1,4 @@
-package newStuff;
+package com.james.window;
 
 import javax.swing.*;
 import java.awt.*;

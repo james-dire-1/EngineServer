@@ -1,4 +1,4 @@
-package newStuff;
+package com.james.networking;
 
 import com.james.common.networking.Packet;
 

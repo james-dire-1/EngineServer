@@ -1,6 +1,7 @@
-package newStuff;
+package templates.communication;
 
 import com.james.common.networking.Packet;
+import com.james.networking.Server;
 import templates.common.networking.PacketType;
 import com.james.common.simulation.objects.PhysicalObjectType;
 import com.james.serverSide.PlayerInfo;
@@ -9,7 +10,7 @@ import templates.serverSide.communication.ServerPacketSendEvents;
 
 import static templates.common.GlobalConstants.IS_DETAILED_NETWORK_DEBUG;
 import static templates.common.GlobalConstants.IS_NETWORK_DEBUG;
-import static newStuff.Logger.log;
+import static com.james.tools.Logger.log;
 
 public class OnlineServerPacketSendEvents implements ServerPacketSendEvents {
 

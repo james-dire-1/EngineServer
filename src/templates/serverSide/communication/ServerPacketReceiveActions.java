@@ -5,7 +5,7 @@ import com.james.serverSide.simulation.Level;
 import com.james.serverSide.simulation.collisionEngine.hitboxes.AABBHitbox;
 import com.james.serverSide.simulation.objects.ConnectedPlayer;
 import com.james.serverSide.simulation.objects.PhysicalObject;
-import newStuff.PlayerColors;
+import game.serverSide.PlayerColors;
 import org.lwjgl.util.vector.Vector3f;
 
 import static templates.common.GlobalConstants.IS_DETAILED_NETWORK_DEBUG;

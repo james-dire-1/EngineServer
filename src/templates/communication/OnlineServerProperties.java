@@ -1,5 +1,7 @@
-package newStuff;
+package templates.communication;
 
+import com.james.networking.ConnectedClient;
+import com.james.window.Window;
 import templates.common.networking.PacketType;
 import com.james.serverSide.PlayerInfo;
 import com.james.serverSide.ServerThreadManager;

@@ -1,13 +1,13 @@
-package game;
+package game.main;
 
 import com.james.common.simulation.collisionEngine.prep.EllipsoidDimensions;
 import com.james.common.simulation.collisionEngine.prep.ModelMeshBankInR3;
 import com.james.common.tools.ModelLoader;
 import com.james.serverSide.LevelInitializer;
-import newStuff.OnlineServerPacketSendEvents;
-import newStuff.OnlineServerProperties;
-import newStuff.Server;
-import newStuff.Window;
+import templates.communication.OnlineServerPacketSendEvents;
+import templates.communication.OnlineServerProperties;
+import com.james.networking.Server;
+import com.james.window.Window;
 
 import java.io.IOException;
 

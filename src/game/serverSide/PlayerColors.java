@@ -1,4 +1,4 @@
-package newStuff;
+package game.serverSide;
 
 import java.util.*;
 
