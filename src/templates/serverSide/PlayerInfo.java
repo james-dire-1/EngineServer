@@ -1,4 +1,4 @@
-package com.james.serverSide;
+package templates.serverSide;
 
 import com.james.serverSide.simulation.Level;
 import com.james.serverSide.simulation.objects.ConnectedPlayer;

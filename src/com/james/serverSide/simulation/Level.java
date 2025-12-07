@@ -10,7 +10,7 @@ import com.james.serverSide.simulation.objects.PhysicalObject;
 import org.lwjgl.util.vector.Vector3f;
 import templates.serverSide.communication.ServerPacketSendEvents;
 import com.james.serverSide.simulation.objects.ConnectedPlayer;
-import com.james.serverSide.PlayerInfo;
+import templates.serverSide.PlayerInfo;
 import com.james.serverSide.ServerThreadManager;
 
 import java.util.*;

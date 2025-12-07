@@ -1,6 +1,6 @@
 package templates.serverSide.communication;
 
-import com.james.serverSide.PlayerInfo;
+import templates.serverSide.PlayerInfo;
 
 /**
  * Contains an unimplemented method for what should happen when a player joins the server. This method

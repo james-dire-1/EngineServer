@@ -20,6 +20,7 @@ public enum PacketType implements Serializable {
     LEVEL_GRAVITY_CHANGED,
     CONFIRM_CHAT_MESSAGE_RECEPTION,
     BROADCASTING_CHAT_MESSAGE,
+    BROADCASTING_SYSTEM_MESSAGE,
 
     // Client to server
     PLAYER_USERNAME,

@@ -4,7 +4,7 @@ import com.james.common.networking.Packet;
 import com.james.networking.Server;
 import templates.common.networking.PacketType;
 import com.james.common.simulation.objects.PhysicalObjectType;
-import com.james.serverSide.PlayerInfo;
+import templates.serverSide.PlayerInfo;
 import org.lwjgl.util.vector.Vector3f;
 import templates.serverSide.communication.ServerPacketSendEvents;
 
@@ -170,6 +170,16 @@ public class OnlineServerPacketSendEvents implements ServerPacketSendEvents {
 
         Packet packet = new Packet(PacketType.BROADCASTING_CHAT_MESSAGE, objects);
         Server.get().sendToAllOtherClientsExcept(exceptPlayerInfo.getConnectedClient(), packet);
+    }
+
+    @Override
+    public void broadcastSystemMessage(String message) {
+        if (IS_NETWORK_DEBUG) log("OnlineServerPacketSendEvents.broadcastSystemMessage");
+
+        Object[] objects = { message };
+
+        Packet packet = new Packet(PacketType.BROADCASTING_SYSTEM_MESSAGE, objects);
+        Server.get().sendToAllClients(packet);
     }
 
     private void sendToGivenPlayers(Packet packet, PlayerInfo... playerInfoArray) {
