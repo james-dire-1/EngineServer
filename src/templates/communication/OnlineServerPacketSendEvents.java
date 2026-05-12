@@ -3,7 +3,7 @@ package templates.communication;
 import com.james.common.networking.Packet;
 import com.james.networking.Server;
 import templates.common.networking.PacketType;
-import com.james.common.simulation.objects.PhysicalObjectType;
+import templates.common.simulation.objects.PhysicalObjectType;
 import templates.serverSide.PlayerInfo;
 import org.lwjgl.util.vector.Vector3f;
 import templates.serverSide.communication.ServerPacketSendEvents;
@@ -93,10 +93,10 @@ public class OnlineServerPacketSendEvents implements ServerPacketSendEvents {
     }
 
     @Override
-    public void sendAABBHitboxAdded(int id, String meshPath, PlayerInfo... playerInfoArray) {
+    public void sendAABBHitboxAdded(int id, String meshPath, int subMeshIdentifier, PlayerInfo... playerInfoArray) {
         if (IS_NETWORK_DEBUG) log("OnlineServerPacketSendEvents.sendAABBHitboxAdded " + "{id=" + id + "}");
 
-        Object[] objects = { id, meshPath };
+        Object[] objects = { id, meshPath, subMeshIdentifier };
 
         Packet packet = new Packet(PacketType.AABB_HITBOX_ADDED, objects);
         sendToGivenPlayers(packet, playerInfoArray);

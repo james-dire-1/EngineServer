@@ -17,15 +17,15 @@ import java.util.List;
 public class CommonCollisionProcedure {
 
     private static final float VERY_CLOSE_DISTANCE = 0.005f;
-    private static final float VERY_CLOSE_DISTANCE_SQUARED = VERY_CLOSE_DISTANCE*VERY_CLOSE_DISTANCE;
+    private static final float VERY_CLOSE_DISTANCE_SQUARED = VERY_CLOSE_DISTANCE * VERY_CLOSE_DISTANCE;
     private static final int MAX_RECURSION_COUNT = 5;
 
     /**
-     * Does broadphase collision test between AbstractEllipsoidHitbox and all AbstractAABBHitboxes.
-     * Determines which AABBs are colliding, and from this info, only relevant Triangles in ellipsoid
-     * world space are tested against in the narrow phase collision test. Does the whole collision
-     * and response routine for both the MovableObject's velocity vector, and the gravity vector.
-     * Sets the final position of the MovableObject.
+     * Does broadphase collision test between AbstractEllipsoidHitbox and all AbstractAABBHitboxes. Determines
+     * which AABBs are colliding, and from this info, only relevant Triangles in ellipsoid world space are
+     * tested against in the narrow phase collision test. Does the whole collision and response routine for
+     * both the MovableObject's velocity vector and gravity vector. Sets the final position of the MovableObject.
+     *
      * @return whether the narrow phase test was performed
      */
     public static boolean performEntireCollisionDetectionAlgorithm(AbstractEllipsoidHitbox ellipsoidHitbox, List<? extends AbstractAABBHitbox> aabbHitboxes, LevelProperties levelProperties) {
@@ -45,7 +45,7 @@ public class CommonCollisionProcedure {
                     (aabbHitbox.upperY >= ellipsoidLowerY && ellipsoidUpperY >= aabbHitbox.lowerY) &&
                     (aabbHitbox.upperZ >= ellipsoidLowerZ && ellipsoidUpperZ >= aabbHitbox.lowerZ)  ) {
                 Vector3f objectPosition = aabbHitbox.object.getPosition();
-                ModelMesh meshInEllipsoidLocalSpace = ellipsoidHitbox.dimensions.modelMeshMap.get(aabbHitbox.meshPath);
+                ModelMesh meshInEllipsoidLocalSpace = ellipsoidHitbox.dimensions.modelMeshMap.get(aabbHitbox.meshPath).get(aabbHitbox.subMeshIdentifier);
                 Triangle[] trianglesInEllipsoidLocalSpace = meshInEllipsoidLocalSpace.triangles;
                 Triangle[] trianglesInEllipsoidWorldSpace = ModelMesh.performOperationOnAllTriangles(trianglesInEllipsoidLocalSpace, PointOperations::addObjectPositionToPoint, objectPosition);
                 allTrianglesInEllipsoidWorldSpaceList.addAll(Arrays.asList(trianglesInEllipsoidWorldSpace));
@@ -83,10 +83,9 @@ public class CommonCollisionProcedure {
     }
 
     /**
-     * Recursive method that performs the entire collision detection and response algorithm for given
-     * position and velocity vectors. In the collision step, checks for collision against all the
-     * Triangles that were passed in, and finds the closest one. Important data from the collision step
-     * are stored in CollisionInfo.
+     * Recursive method that performs the entire collision detection and response algorithm for given position
+     * and velocity vectors. In the collision step, checks for collision against all the Triangles that were
+     * passed in, and finds the closest one. Important data from the collision step are stored in CollisionInfo.
      */
     private static Vector3f collisionDetectionAndResponse(Triangle[] trianglesInEllipsoidWorldSpace, Vector3f position, Vector3f velocity, int recursionCount) {
         if (recursionCount > MAX_RECURSION_COUNT)
@@ -135,10 +134,10 @@ public class CommonCollisionProcedure {
     private static double t;
 
     /**
-     * Checks for collision against a single Triangle. First, we see if a collision with the triangle
-     * plane is possible. Then, tests if a collision with the triangle face has occurred. If this has not
-     * happened, then tests if a collision with the triangle's vertices or edges have occurred. If this
-     * is the closest triangle thus far, then its collision data overwrite old data in CollisionInfo.
+     * Checks for collision against a single Triangle. First, we see if a collision with the triangle plane is
+     * possible. Then, tests if a collision with the triangle face has occurred. If this has not happened, then
+     * tests if a collision with the triangle's vertices or edges has occurred. If this is the closest triangle
+     * thus far, then its collision data overwrite old data in CollisionInfo.
      */
     private static void performCollisionDetectionWithTriangle(Vector3f basePoint, Vector3f velocity, Vector3f p1, Vector3f p2, Vector3f p3, CollisionInfo collisionInfo) {
         Vector3f normalizedVelocity = velocity.normalise(null);
@@ -224,10 +223,10 @@ public class CommonCollisionProcedure {
     }
 
     /**
-     * Tests against one edge by solving a quadratic. If a solution was found, then that means that
-     * collision with the line has occurred, but that does not necessarily mean that collision with the
-     * line segment making up the edge has occurred. Thus, a value f is calculated, and if it is between
-     * 0 and 1, then we know that collision with the edge has occurred.
+     * Tests against one edge by solving a quadratic. If a solution was found, then that means that collision
+     * with the line has occurred, but that does not necessarily mean that collision with the line segment
+     * making up the edge has occurred. Thus, a value f is calculated, and if it is between 0 and 1, then we
+     * know that collision with the edge has occurred.
      */
     private static void testAgainstEdge(float velocityLengthSquared, Vector3f basePoint, Vector3f velocity, Vector3f left, Vector3f right) {
         Vector3f edge = Vector3f.sub(left, right, null);

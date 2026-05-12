@@ -11,7 +11,7 @@ public class GlobalConstants {
     public static final PrintingMode printingMode = PrintingMode.WINDOW;
 
     public enum PrintingMode {
-        SYSOUT, WINDOW
+        STDOUT, WINDOW
     }
 
 }

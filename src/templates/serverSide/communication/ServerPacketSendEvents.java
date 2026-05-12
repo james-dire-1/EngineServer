@@ -1,6 +1,6 @@
 package templates.serverSide.communication;
 
-import com.james.common.simulation.objects.PhysicalObjectType;
+import templates.common.simulation.objects.PhysicalObjectType;
 import templates.serverSide.PlayerInfo;
 import org.lwjgl.util.vector.Vector3f;
 
@@ -19,7 +19,7 @@ public interface ServerPacketSendEvents {
     void sendPhysicalObjectRotated(int id, float rotX, float rotY, float rotZ);
     void sendPhysicalObjectScaled(int id, float scale);
     void sendPhysicalObjectTransformChanged(int id, Vector3f position, Vector3f rotation, float scale);
-    void sendAABBHitboxAdded(int id, String meshPath, PlayerInfo... playerInfoArray);
+    void sendAABBHitboxAdded(int id, String meshPath, int subMeshIdentifier, PlayerInfo... playerInfoArray);
     void sendConnectedPlayerAdded(int id, String username, int color, float x, float y, float z, float rotY, PlayerInfo playerInfo);
     void sendConnectedPlayerTransformChanged(int id, float x, float y, float z, float rotY, PlayerInfo exceptPlayerInfo);
     void sendConnectedPlayerLeft(int id, PlayerInfo exceptPlayerInfo);

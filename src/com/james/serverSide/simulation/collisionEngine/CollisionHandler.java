@@ -29,6 +29,7 @@ public class CollisionHandler {
 
     /**
      * Updates collision logic.
+     *
      * @implNote if the narrow collision test was not performed (i.e. the EllipsoidHitbox did not collide
      * with any AABBs), then the regular update() method of the MovableObject is called.
      */

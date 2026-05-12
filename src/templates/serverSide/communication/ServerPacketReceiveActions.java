@@ -49,7 +49,7 @@ public class ServerPacketReceiveActions {
             startLevel.events.sendPhysicalObjectAddedToLevel(obj.id, obj.type, obj.getPosition(), obj.getRotation(), obj.getScale(), playerInfo);
         }
         for (AABBHitbox aabbHitbox : startLevel.getAABBHitboxes()) {
-            startLevel.events.sendAABBHitboxAdded(((PhysicalObject) aabbHitbox.object).id, aabbHitbox.meshPath, playerInfo);
+            startLevel.events.sendAABBHitboxAdded(((PhysicalObject) aabbHitbox.object).id, aabbHitbox.meshPath, aabbHitbox.subMeshIdentifier, playerInfo);
         }
         for (PlayerInfo otherPlayerInfo : startLevel.getConnectedPlayersMap().keySet()) {
             ConnectedPlayer otherConnectedPlayer = otherPlayerInfo.getConnectedPlayer();

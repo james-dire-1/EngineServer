@@ -11,30 +11,39 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Unique dimensions for an EllipsoidHitbox. This also stores all ModelMeshes whose Triangles will be
- * used in the narrow phase collision test, but in ellipsoid space, since this is necessary for the
- * narrow phase algorithm. (This is why each EllipsoidDimensions object stores ModelMeshes, since they
- * will be unique for each kind of ellipsoid.)
+ * Unique dimensions for an EllipsoidHitbox. This also stores all ModelMeshes whose Triangles will be used in
+ * the narrow phase collision test, but in ellipsoid space, since this is necessary for the narrow phase
+ * algorithm. (This is why each EllipsoidDimensions object stores ModelMeshes, since they will be unique for
+ * each kind of ellipsoid.)
  * @see EllipsoidHitbox
  */
 public class EllipsoidDimensions {
 
     public final Vector3f radius;
 
-    public final Map<String, ModelMesh> modelMeshMap = new HashMap<>();
+    public final Map<String, List<ModelMesh>> modelMeshMap = new HashMap<>();
 
     /**
      * Private constructor that creates a new EllipsoidDimensions of a given radius, and which gets all
      * the ModelMeshes in R3, converts them to ellipsoid space, and stores them in the map.
+     *
+     * @implNote Notice how modelMeshMap here is of the exact same type as modelMeshMap in ModelMeshBankInR3.
      */
     private EllipsoidDimensions(float radiusX, float radiusY, float radiusZ) {
         this.radius = new Vector3f(radiusX, radiusY, radiusZ);
 
-        for (Map.Entry<String, ModelMesh> entry : ModelMeshBankInR3.getModelMeshMap().entrySet()) {
-            ModelMesh modelMeshInR3 = entry.getValue();
-            ModelMesh modelMeshInEllipsoidSpace = convertFromR3ToEllipsoidSpace(modelMeshInR3);
+        for (Map.Entry<String, List<ModelMesh>> outerEntry : ModelMeshBankInR3.getModelMeshMap().entrySet()) {
+            String meshPath = outerEntry.getKey();
+            List<ModelMesh> innerList = outerEntry.getValue();
 
-            modelMeshMap.put(entry.getKey(), modelMeshInEllipsoidSpace);
+            if (!modelMeshMap.containsKey(meshPath)) {
+                modelMeshMap.put(meshPath, new ArrayList<>());
+            }
+
+            for (ModelMesh modelMeshInR3 : innerList) {
+                ModelMesh modelMeshInEllipsoidSpace = convertFromR3ToEllipsoidSpace(modelMeshInR3);
+                modelMeshMap.get(meshPath).add(modelMeshInEllipsoidSpace);
+            }
         }
     }
 

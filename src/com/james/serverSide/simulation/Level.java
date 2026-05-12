@@ -16,9 +16,9 @@ import com.james.serverSide.ServerThreadManager;
 import java.util.*;
 
 /**
- * Class representing an instance of a game world, sort of what some game engines would call a "Scene".
- * Each instance of Level contains a list of PhysicalObjects belonging to it, as well as an update method
- * which gets called from its LevelInitializer every game tick (determined by the Level).
+ * Class representing an instance of a game world, sort of what some game engines would call a "Scene". Each
+ * instance of Level contains a list of PhysicalObjects belonging to it, as well as an update method which gets
+ * called from its LevelInitializer every game tick (determined by the Level).
  * @see LevelInitializer
  * @see PhysicalObject
  */
@@ -43,8 +43,8 @@ public class Level extends LevelProperties {
     }
 
     /**
-     * Method that gets called every game tick, calling all the Level's PhysicalObjects' update() method.
-     * It also updates collisions.
+     * Method that gets called every game tick, calling all the Level's PhysicalObjects' update() method. It
+     * also updates collisions.
      */
     public void update() {
         boolean actionToExecute = ServerThreadManager.getActionsForLevel(this, actionsCopied);
@@ -86,7 +86,7 @@ public class Level extends LevelProperties {
             }
             collisionHandler.update();
 
-            // Other logic other than move (including rotations!)
+            // Logic other than move (including rotations!)
             Iterator<PhysicalObject> iterator = physicalObjects.iterator();
             while (iterator.hasNext()) {
                 PhysicalObject obj = iterator.next();
