@@ -6,9 +6,9 @@ import templates.common.GlobalConstants;
 public class Logger {
 
     public static void log(String message) {
-        if (GlobalConstants.printingMode == GlobalConstants.PrintingMode.STDOUT) {
+        if (GlobalConstants.headless) {
             System.out.println(message);
-        } else if (GlobalConstants.printingMode == GlobalConstants.PrintingMode.WINDOW) {
+        } else {
             Window.get().println(message);
         }
     }

@@ -1,7 +1,7 @@
 package templates.communication;
 
 import com.james.networking.ConnectedClient;
-import com.james.window.Window;
+import com.james.tools.Logger;
 import templates.common.networking.PacketType;
 import templates.serverSide.PlayerInfo;
 import com.james.serverSide.ServerThreadManager;
@@ -28,7 +28,7 @@ public class OnlineServerProperties implements ServerProperties {
 
     // TODO: 2024-07-10 Setting the read listeners probably shouldn't be done after ConnectedClient creation..
     public static void clientJoined(ConnectedClient connectedClient) {
-        Window.get().println("A client has connected to the server.");
+        Logger.log("A client has connected to the server.");
 
         connectedClient.setReadListener(PacketType.PLAYER_USERNAME, OnlineServerProperties::playerUsernameReceived);
         connectedClient.setReadListener(PacketType.PLAYER_JOINED, OnlineServerProperties::playerJoinedReceived);
@@ -57,7 +57,7 @@ public class OnlineServerProperties implements ServerProperties {
     }
 
     private static void playerJoinedReceived(ConnectedClient connectedClient, Object[] objects) {
-        Window.get().println("A player has joined.");
+        Logger.log("A player has joined.");
 
         float x = (float) objects[0];
         float y = (float) objects[1];
@@ -107,7 +107,7 @@ public class OnlineServerProperties implements ServerProperties {
     }
 
     private static void onClientDisconnect(Exception e, ConnectedClient connectedClient) {
-        Window.get().println("A client has disconnected: " + e.toString());
+        Logger.log("A client has disconnected: " + e.toString());
 
         PlayerInfo playerInfo;
         synchronized (clientsToPlayerInfoMap) {
