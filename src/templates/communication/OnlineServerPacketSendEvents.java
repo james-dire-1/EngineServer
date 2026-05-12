@@ -10,7 +10,7 @@ import templates.serverSide.communication.ServerPacketSendEvents;
 
 import static templates.common.GlobalConstants.IS_DETAILED_NETWORK_DEBUG;
 import static templates.common.GlobalConstants.IS_NETWORK_DEBUG;
-import static com.james.tools.Logger.log;
+import static com.james.common.tools.Logger.log;
 
 public class OnlineServerPacketSendEvents implements ServerPacketSendEvents {
 

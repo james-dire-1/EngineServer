@@ -1,4 +1,4 @@
-package com.james.tools;
+package com.james.common.tools;
 
 import com.james.window.Window;
 import templates.common.GlobalConstants;

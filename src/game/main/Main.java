@@ -4,7 +4,7 @@ import com.james.common.simulation.collisionEngine.prep.EllipsoidDimensions;
 import com.james.common.simulation.collisionEngine.prep.ModelMeshBankInR3;
 import com.james.common.tools.modelLoading.ModelLoader;
 import com.james.serverSide.LevelInitializer;
-import com.james.tools.Logger;
+import com.james.common.tools.Logger;
 import templates.common.GlobalConstants;
 import templates.communication.OnlineServerPacketSendEvents;
 import templates.communication.OnlineServerProperties;

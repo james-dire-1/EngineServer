@@ -1,7 +1,7 @@
 package templates.communication;
 
 import com.james.networking.ConnectedClient;
-import com.james.tools.Logger;
+import com.james.common.tools.Logger;
 import templates.common.networking.PacketType;
 import templates.serverSide.PlayerInfo;
 import com.james.serverSide.ServerThreadManager;

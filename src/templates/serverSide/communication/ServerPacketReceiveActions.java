@@ -10,6 +10,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 import static templates.common.GlobalConstants.IS_DETAILED_NETWORK_DEBUG;
 import static templates.common.GlobalConstants.IS_NETWORK_DEBUG;
+import static com.james.common.tools.Logger.log;
 
 /**
  * Methods that handle what should happen on the server side when particular events occur on the client side.
@@ -17,7 +18,7 @@ import static templates.common.GlobalConstants.IS_NETWORK_DEBUG;
 public class ServerPacketReceiveActions {
 
     public static void clientJoined(ServerProperties serverProperties) {
-        if (IS_NETWORK_DEBUG) System.out.println("ServerPacketReceiveActions.clientJoined");
+        if (IS_NETWORK_DEBUG) log("ServerPacketReceiveActions.clientJoined");
 
         PlayerInfo playerInfo = new PlayerInfo();
         playerInfo.color = PlayerColors.getNextAvailableColor();
@@ -28,7 +29,7 @@ public class ServerPacketReceiveActions {
     }
 
     public static void playerUsernameReceived(PlayerInfo playerInfo, String username) {
-        if (IS_NETWORK_DEBUG) System.out.println("ServerPacketReceiveActions.playerUsernameReceived");
+        if (IS_NETWORK_DEBUG) log("ServerPacketReceiveActions.playerUsernameReceived");
 
         playerInfo.username = username;
 
@@ -38,7 +39,7 @@ public class ServerPacketReceiveActions {
 
     // TODO: 2024-06-27 Make the server decide where the player should be placed initially
     public static void playerJoinedReceived(PlayerInfo playerInfo, float x, float y, float z, float rotY) {
-        if (IS_NETWORK_DEBUG) System.out.println("ServerPacketReceiveActions.playerJoinedReceived");
+        if (IS_NETWORK_DEBUG) log("ServerPacketReceiveActions.playerJoinedReceived");
 
         Level startLevel = Level.getByName("main");
         playerInfo.level = startLevel;
@@ -71,7 +72,7 @@ public class ServerPacketReceiveActions {
     }
 
     public static void playerTransformChangedReceived(PlayerInfo playerInfo, float x, float y, float z, float rotY) {
-        if (IS_DETAILED_NETWORK_DEBUG) System.out.println("ServerPacketReceiveActions.playerMovedReceived");
+        if (IS_DETAILED_NETWORK_DEBUG) log("ServerPacketReceiveActions.playerMovedReceived");
 
         ConnectedPlayer connectedPlayer = playerInfo.getConnectedPlayer();
         connectedPlayer.setPosition(x, y, z);
@@ -79,7 +80,7 @@ public class ServerPacketReceiveActions {
     }
 
     public static void playerLeftReceived(PlayerInfo playerInfo) {
-        if (IS_NETWORK_DEBUG) System.out.println("ServerPacketReceiveActions.playerLeftReceived");
+        if (IS_NETWORK_DEBUG) log("ServerPacketReceiveActions.playerLeftReceived");
 
         Level playerLevel = playerInfo.level;
         ConnectedPlayer connectedPlayer = playerLevel.removeConnectedPlayer(playerInfo);
@@ -90,13 +91,13 @@ public class ServerPacketReceiveActions {
     }
 
     public static void changePauseStateReceived(PlayerInfo playerInfo, boolean shouldPause) {
-        if (IS_NETWORK_DEBUG) System.out.println("ServerPacketReceiveActions.changePauseStateReceived " + "{shouldPause=" + shouldPause + "}");
+        if (IS_NETWORK_DEBUG) log("ServerPacketReceiveActions.changePauseStateReceived " + "{shouldPause=" + shouldPause + "}");
 
         playerInfo.level.isPaused = shouldPause;
     }
 
     public static void chatMessageReceived(PlayerInfo playerInfo, int localMessageId, String message) {
-        if (IS_NETWORK_DEBUG) System.out.println("ServerPacketReceiveActions.chatMessageReceived");
+        if (IS_NETWORK_DEBUG) log("ServerPacketReceiveActions.chatMessageReceived");
 
         Level playerLevel = playerInfo.level;
 
