@@ -5,7 +5,7 @@ import templates.common.GlobalConstants;
 
 public class Logger {
 
-    public static void log(String message) {
+    public static void println(String message) {
         if (GlobalConstants.headless) {
             System.out.println(message);
         } else {

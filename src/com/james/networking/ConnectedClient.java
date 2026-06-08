@@ -3,10 +3,12 @@ package com.james.networking;
 import com.james.common.networking.Packet;
 import templates.common.networking.PacketType;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
@@ -50,7 +52,9 @@ public class ConnectedClient implements Runnable {
                 listener.accept(this, packet.data);
             }
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+            if (!(e instanceof EOFException) && !(e instanceof SocketException && e.getMessage().equals("Socket closed"))) {
+                e.printStackTrace();
+            }
 
             serverInstance.removeConnectedClient(this);
             disconnect();

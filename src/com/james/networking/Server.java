@@ -15,6 +15,7 @@ public class Server implements Runnable {
     private final List<ConnectedClient> connectedClients = new ArrayList<>();
 
     private Consumer<ConnectedClient> connectedClientAddedListener;
+    private volatile boolean shouldRun = true;
 
     public Server(int port) throws IOException {
         server = new ServerSocket(port, 100);
@@ -26,7 +27,7 @@ public class Server implements Runnable {
     @Override
     public void run() {
         try {
-            while (true) {
+            while (shouldRun) {
                 Socket connection = server.accept();
                 ConnectedClient connectedClient = new ConnectedClient(this, connection);
                 synchronized (connectedClients) {
@@ -36,7 +37,9 @@ public class Server implements Runnable {
                 connectedClientAddedListener.accept(connectedClient);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            if (shouldRun) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -50,12 +53,16 @@ public class Server implements Runnable {
         }
     }
 
-    public void disconnect() {
+    public void disconnect() throws IOException {
+        shouldRun = false;
+
         synchronized (connectedClients) {
             for (ConnectedClient connectedClient : connectedClients) {
                 connectedClient.disconnect();
             }
         }
+
+        server.close();
     }
 
     public void sendToAllClients(Packet packet) {
@@ -66,7 +73,7 @@ public class Server implements Runnable {
         }
     }
 
-    public void sendToAllOtherClientsExcept(ConnectedClient except, Packet packet) {
+    public void sendToAllClientsExcept(ConnectedClient except, Packet packet) {
         synchronized (connectedClients) {
             for (ConnectedClient connectedClient : connectedClients) {
                 if (!connectedClient.equals(except)) {

@@ -5,6 +5,9 @@ import com.james.common.simulation.collisionEngine.prep.ModelMeshBankInR3;
 import com.james.common.tools.modelLoading.ModelLoader;
 import com.james.serverSide.LevelInitializer;
 import com.james.common.tools.Logger;
+import com.james.serverSide.ServerThreadManager;
+import com.james.serverSide.simulation.Level;
+import com.james.tools.ThreadManager;
 import templates.common.GlobalConstants;
 import templates.communication.OnlineServerPacketSendEvents;
 import templates.communication.OnlineServerProperties;
@@ -16,7 +19,11 @@ import java.io.IOException;
 
 public class Main {
 
+    public static volatile boolean everythingIsCompleted = false;
+    public static boolean shouldClose = false;
+
     private static final int PORT = 6789;
+    private static LevelInitializer levelInitializer;
 
     public static void main(String[] args) {
         try {
@@ -34,26 +41,60 @@ public class Main {
             }
 
             if (!GlobalConstants.headless) {
-                new Window("Game Server", 500, 300);
+                new Window("Survival Game Server", 500, 300);
             }
 
-            Logger.log("Survival game server");
+            Logger.println("Survival game server");
+            levelInitializer = new LevelInitializer(new OnlineServerPacketSendEvents(), Scenes.beachScene);
+            Logger.println("Level initialized");
 
             try {
                 Server server = new Server(PORT);
                 server.setConnectedClientAddedListener(OnlineServerProperties::clientJoined);
-
-                Logger.log("Server successfully set up on port " + PORT);
-
-                // TODO: 2024-07-11 Problems will happen if a wait is placed here, should a client join during that time
-                new LevelInitializer(new OnlineServerPacketSendEvents(), Scenes.beachScene);
+                Logger.println("Server successfully set up on port " + PORT);
             } catch (IOException e) {
-                Logger.log("Server was unable to start with the following error:");
-                Logger.log(e.toString());
+                Logger.println("Server was unable to start with the following error:");
+                Logger.println(e.toString());
+                shutDownServer();
+                return;
+            }
+
+            while (!shouldClose) {
+                Thread.sleep(100);
+                ThreadManager.updateMain();
+
+                if (shouldClose) {
+                    shutDownServer();
+                    Logger.println("Server successfully closed");
+
+                    if (Window.get().requestedClose) {
+                        Window.get().dispose();
+                    }
+                }
             }
         } catch (Exception e) {
-            Logger.log(e.toString());
+            Logger.println(e.toString());
         }
+    }
+
+    private static void shutDownServer() {
+        try {
+            Server.get().disconnect();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        levelInitializer.shouldRun = false;
+
+        try {
+            levelInitializer.thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        Level.clearNameToLevelMap();
+        ServerThreadManager.clearEverything();
+        everythingIsCompleted = true;
     }
 
 }

@@ -10,13 +10,13 @@ import templates.serverSide.communication.ServerPacketSendEvents;
 
 import static templates.common.GlobalConstants.IS_DETAILED_NETWORK_DEBUG;
 import static templates.common.GlobalConstants.IS_NETWORK_DEBUG;
-import static com.james.common.tools.Logger.log;
+import static com.james.common.tools.Logger.println;
 
 public class OnlineServerPacketSendEvents implements ServerPacketSendEvents {
 
     @Override
     public void sendUsernamePrompt(PlayerInfo playerInfo) {
-        if (IS_NETWORK_DEBUG) log("OnlineServerPacketSendEvents.promptUsername");
+        if (IS_NETWORK_DEBUG) println("OnlineServerPacketSendEvents.promptUsername");
 
         Packet packet = new Packet(PacketType.USERNAME_PROMPT, (Object[]) null);
         playerInfo.getConnectedClient().sendPacket(packet);
@@ -24,7 +24,7 @@ public class OnlineServerPacketSendEvents implements ServerPacketSendEvents {
 
     @Override
     public void notifyUsernameSuccess(PlayerInfo playerInfo, String username, int color, Vector3f spawnPoint) {
-        if (IS_NETWORK_DEBUG) log("OnlineServerPacketSendEvents.notifyUsernameSuccess");
+        if (IS_NETWORK_DEBUG) println("OnlineServerPacketSendEvents.notifyUsernameSuccess");
 
         Object[] objects = { username, color, spawnPoint };
 
@@ -36,7 +36,7 @@ public class OnlineServerPacketSendEvents implements ServerPacketSendEvents {
     // TODO: 2024-07-11 since only players of that specific level should receive the data
     @Override
     public void notifyThatLevelIsReady(PlayerInfo playerInfo) {
-        if (IS_NETWORK_DEBUG) log("OnlineServerPacketSendEvents.notifyThatLevelIsReady");
+        if (IS_NETWORK_DEBUG) println("OnlineServerPacketSendEvents.notifyThatLevelIsReady");
 
         Packet packet = new Packet(PacketType.LEVEL_IS_READY, (Object[]) null);
         playerInfo.getConnectedClient().sendPacket(packet);
@@ -44,7 +44,7 @@ public class OnlineServerPacketSendEvents implements ServerPacketSendEvents {
 
     @Override
     public void sendPhysicalObjectAddedToLevel(int id, PhysicalObjectType type, Vector3f position, Vector3f rotation, float scale, PlayerInfo... playerInfoArray) {
-        if (IS_NETWORK_DEBUG) log("OnlineServerPacketSendEvents.sendPhysicalObjectAddedToLevel " + "{id=" + id + "} {type=" + type +"}");
+        if (IS_NETWORK_DEBUG) println("OnlineServerPacketSendEvents.sendPhysicalObjectAddedToLevel " + "{id=" + id + "} {type=" + type +"}");
 
         Object[] objects = { id, type, position.x, position.y, position.z, rotation.x, rotation.y, rotation.z, scale };
 
@@ -54,7 +54,7 @@ public class OnlineServerPacketSendEvents implements ServerPacketSendEvents {
 
     @Override
     public void sendPhysicalObjectMoved(int id, float x, float y, float z) {
-        if (IS_DETAILED_NETWORK_DEBUG) log("OnlineServerPacketSendEvents.sendPhysicalObjectMoved");
+        if (IS_DETAILED_NETWORK_DEBUG) println("OnlineServerPacketSendEvents.sendPhysicalObjectMoved");
 
         Object[] objects = { id, x, y, z };
 
@@ -64,7 +64,7 @@ public class OnlineServerPacketSendEvents implements ServerPacketSendEvents {
 
     @Override
     public void sendPhysicalObjectRotated(int id, float rotX, float rotY, float rotZ) {
-        if (IS_DETAILED_NETWORK_DEBUG) log("OnlineServerPacketSendEvents.sendPhysicalObjectRotated");
+        if (IS_DETAILED_NETWORK_DEBUG) println("OnlineServerPacketSendEvents.sendPhysicalObjectRotated");
 
         Object[] objects = { id, rotX, rotY, rotZ };
 
@@ -74,7 +74,7 @@ public class OnlineServerPacketSendEvents implements ServerPacketSendEvents {
 
     @Override
     public void sendPhysicalObjectScaled(int id, float scale) {
-        if (IS_DETAILED_NETWORK_DEBUG) log("OnlineServerPacketSendEvents.sendPhysicalObjectScaled");
+        if (IS_DETAILED_NETWORK_DEBUG) println("OnlineServerPacketSendEvents.sendPhysicalObjectScaled");
 
         Object[] objects = { id, scale };
 
@@ -84,7 +84,7 @@ public class OnlineServerPacketSendEvents implements ServerPacketSendEvents {
 
     @Override
     public void sendPhysicalObjectTransformChanged(int id, Vector3f position, Vector3f rotation, float scale) {
-        if (IS_DETAILED_NETWORK_DEBUG) log("OnlineServerPacketSendEvents.sendPhysicalObjectTransformChanged");
+        if (IS_DETAILED_NETWORK_DEBUG) println("OnlineServerPacketSendEvents.sendPhysicalObjectTransformChanged");
 
         Object[] objects = { id, position.x, position.y, position.z, rotation.x, rotation.y, rotation.z, scale };
 
@@ -94,7 +94,7 @@ public class OnlineServerPacketSendEvents implements ServerPacketSendEvents {
 
     @Override
     public void sendAABBHitboxAdded(int id, String meshPath, int subMeshIdentifier, PlayerInfo... playerInfoArray) {
-        if (IS_NETWORK_DEBUG) log("OnlineServerPacketSendEvents.sendAABBHitboxAdded " + "{id=" + id + "}");
+        if (IS_NETWORK_DEBUG) println("OnlineServerPacketSendEvents.sendAABBHitboxAdded " + "{id=" + id + "}");
 
         Object[] objects = { id, meshPath, subMeshIdentifier };
 
@@ -104,7 +104,7 @@ public class OnlineServerPacketSendEvents implements ServerPacketSendEvents {
 
     @Override
     public void sendConnectedPlayerAdded(int id, String username, int color, float x, float y, float z, float rotY, PlayerInfo playerInfo) {
-        if (IS_NETWORK_DEBUG) log("OnlineServerPacketSendEvents.sendConnectedPlayerAdded " + "{id=" + id + "} to {id=" + playerInfo.getConnectedPlayer().id + "}");
+        if (IS_NETWORK_DEBUG) println("OnlineServerPacketSendEvents.sendConnectedPlayerAdded " + "{id=" + id + "} to {id=" + playerInfo.getConnectedPlayer().id + "}");
 
         Object[] objects = { id, username, color, x, y, z, rotY };
 
@@ -114,27 +114,27 @@ public class OnlineServerPacketSendEvents implements ServerPacketSendEvents {
 
     @Override
     public void sendConnectedPlayerTransformChanged(int id, float x, float y, float z, float rotY, PlayerInfo exceptPlayerInfo) {
-        if (IS_DETAILED_NETWORK_DEBUG) log("OnlineServerPacketSendEvents.sendConnectedPlayerMoved");
+        if (IS_DETAILED_NETWORK_DEBUG) println("OnlineServerPacketSendEvents.sendConnectedPlayerMoved");
 
         Object[] objects = { id, x, y, z, rotY };
 
         Packet packet = new Packet(PacketType.CONNECTED_PLAYER_TRANSFORM_CHANGED, objects);
-        Server.get().sendToAllOtherClientsExcept(exceptPlayerInfo.getConnectedClient(), packet);
+        Server.get().sendToAllClientsExcept(exceptPlayerInfo.getConnectedClient(), packet);
     }
 
     @Override
     public void sendConnectedPlayerLeft(int id, PlayerInfo exceptPlayerInfo) {
-        if (IS_NETWORK_DEBUG) log("OnlineServerPacketSendEvents.sendConnectedPlayerLeft " + "{id=" + id + "}");
+        if (IS_NETWORK_DEBUG) println("OnlineServerPacketSendEvents.sendConnectedPlayerLeft " + "{id=" + id + "}");
 
         Object[] objects = { id };
 
         Packet packet = new Packet(PacketType.CONNECTED_PLAYER_LEFT, objects);
-        Server.get().sendToAllOtherClientsExcept(exceptPlayerInfo.getConnectedClient(), packet);
+        Server.get().sendToAllClientsExcept(exceptPlayerInfo.getConnectedClient(), packet);
     }
 
     @Override
     public void sendLevelSecondsPerGameTickChanged(float secondsPerGameTick) {
-        if (IS_NETWORK_DEBUG) log("OnlineServerPacketSendEvents.sendLevelSecondsPerGameTickChanged");
+        if (IS_NETWORK_DEBUG) println("OnlineServerPacketSendEvents.sendLevelSecondsPerGameTickChanged");
 
         Object[] objects = { secondsPerGameTick };
 
@@ -144,7 +144,7 @@ public class OnlineServerPacketSendEvents implements ServerPacketSendEvents {
 
     @Override
     public void sendLevelGravityChanged(float x, float y, float z) {
-        if (IS_NETWORK_DEBUG) log("OnlineServerPacketSendEvents.sendLevelGravityChanged");
+        if (IS_NETWORK_DEBUG) println("OnlineServerPacketSendEvents.sendLevelGravityChanged");
 
         Object[] objects = { x, y, z };
 
@@ -154,7 +154,7 @@ public class OnlineServerPacketSendEvents implements ServerPacketSendEvents {
 
     @Override
     public void confirmChatMessageReception(PlayerInfo playerInfo, int localMessageId) {
-        if (IS_NETWORK_DEBUG) log("OnlineServerPacketSendEvents.confirmChatMessageReception");
+        if (IS_NETWORK_DEBUG) println("OnlineServerPacketSendEvents.confirmChatMessageReception");
 
         Object[] objects = { localMessageId };
 
@@ -164,17 +164,17 @@ public class OnlineServerPacketSendEvents implements ServerPacketSendEvents {
 
     @Override
     public void broadcastChatMessage(int playerId, String message, PlayerInfo exceptPlayerInfo) {
-        if (IS_NETWORK_DEBUG) log("OnlineServerPacketSendEvents.broadcastChatMessage");
+        if (IS_NETWORK_DEBUG) println("OnlineServerPacketSendEvents.broadcastChatMessage");
 
         Object[] objects = { playerId, message };
 
         Packet packet = new Packet(PacketType.BROADCASTING_CHAT_MESSAGE, objects);
-        Server.get().sendToAllOtherClientsExcept(exceptPlayerInfo.getConnectedClient(), packet);
+        Server.get().sendToAllClientsExcept(exceptPlayerInfo.getConnectedClient(), packet);
     }
 
     @Override
     public void broadcastSystemMessage(String message) {
-        if (IS_NETWORK_DEBUG) log("OnlineServerPacketSendEvents.broadcastSystemMessage");
+        if (IS_NETWORK_DEBUG) println("OnlineServerPacketSendEvents.broadcastSystemMessage");
 
         Object[] objects = { message };
 
