@@ -76,6 +76,13 @@ public class ServerThreadManager {
         }
     }
 
+    public static void clearEverything() {
+        synchronized (lock) {
+            levelToActionsMap.clear();
+            actionToExecuteMap.clear();
+        }
+    }
+
     public interface Action {
         void invoke();
     }

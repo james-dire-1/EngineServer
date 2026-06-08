@@ -23,10 +23,10 @@ public class OnlineServerPacketSendEvents implements ServerPacketSendEvents {
     }
 
     @Override
-    public void notifyUsernameSuccess(PlayerInfo playerInfo, String username, int color) {
+    public void notifyUsernameSuccess(PlayerInfo playerInfo, String username, int color, Vector3f spawnPoint) {
         if (IS_NETWORK_DEBUG) log("OnlineServerPacketSendEvents.notifyUsernameSuccess");
 
-        Object[] objects = { username, color };
+        Object[] objects = { username, color, spawnPoint };
 
         Packet packet = new Packet(PacketType.USERNAME_SUCCESS, objects);
         playerInfo.getConnectedClient().sendPacket(packet);

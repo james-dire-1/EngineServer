@@ -39,8 +39,10 @@ public class ModelLoader {
         AIScene scene = aiImportFile(fullPath,aiProcess_Triangulate | aiProcess_FlipUVs |
                 aiProcess_JoinIdenticalVertices);
 
-        if (scene == null)
-            throw new RuntimeException("Assimp import failed! " + aiGetErrorString());
+        if (scene == null) {
+            System.out.println("Assimp import failed! " + aiGetErrorString());
+            throw new RuntimeException();
+        }
 
         PointerBuffer meshes = scene.mMeshes();
         Objects.requireNonNull(meshes);

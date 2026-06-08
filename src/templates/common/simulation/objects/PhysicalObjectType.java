@@ -11,5 +11,6 @@ public enum PhysicalObjectType {
     TestEnvironment,
     Other,
     DesertEnvironment,
-    BeachEnvironment
+    BeachEnvironment,
+    PlainsEnvironment
 }

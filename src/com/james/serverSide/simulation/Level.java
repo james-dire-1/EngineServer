@@ -15,6 +15,7 @@ import com.james.serverSide.ServerThreadManager;
 
 import java.util.*;
 
+// TODO: 2026-06-04 This class is kind of a mess; maybe restructure?
 /**
  * Class representing an instance of a game world, sort of what some game engines would call a "Scene". Each
  * instance of Level contains a list of PhysicalObjects belonging to it, as well as an update method which gets
@@ -25,6 +26,7 @@ import java.util.*;
 public class Level extends LevelProperties {
 
     public final ServerPacketSendEvents events;
+    public final Vector3f primarySpawnPoint;
     public boolean isPaused = false;
 
     private final Map<PlayerInfo, ConnectedPlayer> connectedPlayersMap = new HashMap<>();
@@ -36,10 +38,13 @@ public class Level extends LevelProperties {
     private final Vector3f prevPosition = new Vector3f();
     private final Vector3f prevRotation = new Vector3f();
 
-    public Level(String name, ServerPacketSendEvents events) {
+    public Level(String name, Vector3f primarySpawnPoint, ServerPacketSendEvents events) {
+        this.primarySpawnPoint = primarySpawnPoint;
         this.events = events;
 
-        nameToLevelMap.put(name, this);
+        synchronized (lock) {
+            nameToLevelMap.put(name, this);
+        }
     }
 
     /**
@@ -133,7 +138,7 @@ public class Level extends LevelProperties {
 
     private final List<PhysicalObject> objectsToAdd = new ArrayList<>();
     public void add(PhysicalObject obj) {
-        physicalObjects.add(obj);
+        objectsToAdd.add(obj);
     }
 
     public List<PhysicalObject> getPhysicalObjects() {
@@ -156,8 +161,25 @@ public class Level extends LevelProperties {
      * All Levels can be accessed through this map.
      */
     private static final Map<String, Level> nameToLevelMap = new HashMap<>();
+
     public static Level getByName(String name) {
-        return nameToLevelMap.get(name);
+        synchronized (lock) {
+            return nameToLevelMap.get(name);
+        }
     }
+
+    public static Level getFirstLevel() {
+        synchronized (lock) {
+            return nameToLevelMap.values().toArray(new Level[0])[0];
+        }
+    }
+
+    public static void clearNameToLevelMap() {
+        synchronized (lock) {
+            nameToLevelMap.clear();
+        }
+    }
+
+    private static final Object lock = new Object();
 
 }

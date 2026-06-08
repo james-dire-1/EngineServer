@@ -21,11 +21,11 @@ public class LevelInitializer implements Runnable {
     private final Level level;
     private final Scene scene;
 
-    public LevelInitializer(String levelName, ServerPacketSendEvents events, Scene scene) {
+    public LevelInitializer(ServerPacketSendEvents events, Scene scene) {
         lastInstance = this;
 
         this.thread = new Thread(this);
-        this.level = new Level(levelName, events);
+        this.level = new Level(scene.name(), scene.primarySpawnPoint(), events);
         this.scene = scene;
 
         thread.start();
@@ -48,11 +48,6 @@ public class LevelInitializer implements Runnable {
                 level.update();
             }
         }
-    }
-
-    @FunctionalInterface
-    public interface Scene {
-        void onStartup(Level level);
     }
 
 }

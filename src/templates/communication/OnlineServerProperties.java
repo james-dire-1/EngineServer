@@ -41,7 +41,7 @@ public class OnlineServerProperties implements ServerProperties {
         // TODO: 2024-07-07 does it matter whether this is done on this thread or on the level thread?
         mostRecentConnectedClient = connectedClient;
 
-        ServerThreadManager.executeOnALevelThread(Level.getByName("main"), () -> {
+        ServerThreadManager.executeOnALevelThread(Level.getFirstLevel(), () -> {
             ServerPacketReceiveActions.clientJoined(serverProperties);
         });
     }
@@ -51,7 +51,7 @@ public class OnlineServerProperties implements ServerProperties {
 
         PlayerInfo playerInfo = getPlayerInfo(connectedClient);
 
-        ServerThreadManager.executeOnALevelThread(Level.getByName("main"), () -> {
+        ServerThreadManager.executeOnALevelThread(Level.getFirstLevel(), () -> {
             ServerPacketReceiveActions.playerUsernameReceived(playerInfo, username);
         });
     }
@@ -66,7 +66,7 @@ public class OnlineServerProperties implements ServerProperties {
 
         PlayerInfo playerInfo = getPlayerInfo(connectedClient);
 
-        ServerThreadManager.executeOnALevelThread(Level.getByName("main"), () -> {
+        ServerThreadManager.executeOnALevelThread(Level.getFirstLevel(), () -> {
             ServerPacketReceiveActions.playerJoinedReceived(playerInfo, x, y, z, rotY);
         });
     }

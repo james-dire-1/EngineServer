@@ -40,7 +40,7 @@ public class CollisionHandler {
             if (movableObject.isAffectedByAABBCollisions) {
                 prevPosition.set(movableObject.getPosition());
 
-                boolean algorithmPerformed = CommonCollisionProcedure.performEntireCollisionDetectionAlgorithm(ellipsoidHitbox, aabbHitboxes, level);
+                boolean algorithmPerformed = CommonCollisionProcedure.performEntireCollisionDetectionAlgorithm(ellipsoidHitbox, aabbHitboxes, level, null);
                 if (!algorithmPerformed) {
                     movableObject.moveUpdate();
                 }

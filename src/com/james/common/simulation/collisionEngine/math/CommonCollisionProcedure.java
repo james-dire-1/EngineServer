@@ -28,7 +28,7 @@ public class CommonCollisionProcedure {
      *
      * @return whether the narrow phase test was performed
      */
-    public static boolean performEntireCollisionDetectionAlgorithm(AbstractEllipsoidHitbox ellipsoidHitbox, List<? extends AbstractAABBHitbox> aabbHitboxes, LevelProperties levelProperties) {
+    public static boolean performEntireCollisionDetectionAlgorithm(AbstractEllipsoidHitbox ellipsoidHitbox, List<? extends AbstractAABBHitbox> aabbHitboxes, LevelProperties levelProperties, DebugAccumulator debugAccumulator) {
         List<Triangle> allTrianglesInEllipsoidWorldSpaceList = new ArrayList<>();
 
         for (AbstractAABBHitbox aabbHitbox : aabbHitboxes) {
@@ -49,7 +49,13 @@ public class CommonCollisionProcedure {
                 Triangle[] trianglesInEllipsoidLocalSpace = meshInEllipsoidLocalSpace.triangles;
                 Triangle[] trianglesInEllipsoidWorldSpace = ModelMesh.performOperationOnAllTriangles(trianglesInEllipsoidLocalSpace, PointOperations::addObjectPositionToPoint, objectPosition);
                 allTrianglesInEllipsoidWorldSpaceList.addAll(Arrays.asList(trianglesInEllipsoidWorldSpace));
+                if (debugAccumulator != null) debugAccumulator.accumulator++;
             }
+        }
+
+        if (debugAccumulator != null) {
+            debugAccumulator.collisions = debugAccumulator.accumulator;
+            debugAccumulator.accumulator = 0;
         }
 
         Triangle[] allTrianglesInEllipsoidWorldSpace = allTrianglesInEllipsoidWorldSpaceList.toArray(new Triangle[0]);
@@ -257,6 +263,11 @@ public class CommonCollisionProcedure {
         private boolean foundCollision;
         private float intersectionDistance;
         private Vector3f intersectionPoint;
+    }
+
+    public static class DebugAccumulator {
+        public int collisions;
+        private int accumulator;
     }
 
 }

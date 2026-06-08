@@ -20,11 +20,9 @@ public class Main {
 
     public static void main(String[] args) {
         try {
-            ModelLoader.init("/one-sided-wall.dae", "/test-environment.dae", "/desert-2.dae",
-                    "/beach-scene.dae");
+            ModelLoader.init("/objects/abstract-art.dae", "/objects/one-sided-wall.dae", "/objects/stall.obj", "/scenes/beach-scene.dae", "/scenes/desert-scene.dae", "/scenes/plains-scene.dae", "/scenes/test-scene.dae");
 
-            ModelMeshBankInR3.init("/one-sided-wall.dae", "/test-environment.dae",
-                    "/desert-2.dae", "/beach-scene.dae");
+            ModelMeshBankInR3.init("/scenes/beach-scene.dae", "/scenes/desert-scene.dae", "/scenes/plains-scene.dae", "/scenes/test-scene.dae");
             EllipsoidDimensions.init( new float[][]{ { 1, 1, 1 }, { 0.5f, 3, 0.5f } } );
 
             GlobalConstants.headless = false;
@@ -36,10 +34,10 @@ public class Main {
             }
 
             if (!GlobalConstants.headless) {
-                new Window("Game Server");
+                new Window("Game Server", 500, 300);
             }
 
-            Logger.log("Game server version 1");
+            Logger.log("Survival game server");
 
             try {
                 Server server = new Server(PORT);
@@ -48,7 +46,7 @@ public class Main {
                 Logger.log("Server successfully set up on port " + PORT);
 
                 // TODO: 2024-07-11 Problems will happen if a wait is placed here, should a client join during that time
-                new LevelInitializer("main", new OnlineServerPacketSendEvents(), Scenes::beachScene);
+                new LevelInitializer(new OnlineServerPacketSendEvents(), Scenes.beachScene);
             } catch (IOException e) {
                 Logger.log("Server was unable to start with the following error:");
                 Logger.log(e.toString());
