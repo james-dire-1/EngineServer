@@ -5,6 +5,7 @@ import com.james.common.simulation.collisionEngine.prep.ModelMeshBankInR3;
 import com.james.common.tools.modelLoading.ModelLoader;
 import com.james.serverSide.LevelInitializer;
 import com.james.common.tools.Logger;
+import com.james.serverSide.Scene;
 import com.james.serverSide.ServerThreadManager;
 import com.james.serverSide.simulation.Level;
 import com.james.tools.ThreadManager;
@@ -23,6 +24,8 @@ public class Main {
     public static volatile boolean everythingIsCompleted = false;
     public static volatile boolean shouldClose = false;
 
+    public static Scene sceneToUse;
+
     private static final int PORT = 6789;
     private static LevelInitializer levelInitializer;
 
@@ -34,10 +37,26 @@ public class Main {
             EllipsoidDimensions.init( new float[][]{ { 1, 1, 1 }, { 0.5f, 3, 0.5f } } );
 
             GlobalConstants.headless = false;
+
+            if (GlobalConstants.IS_QUICK_START) {
+                sceneToUse = GlobalConstants.QUICK_START_SCENE;
+            }
+
             for (String arg : args) {
-                if (arg.equalsIgnoreCase("headless")) {
-                    GlobalConstants.headless = true;
-                    break;
+                if (!GlobalConstants.headless) {
+                    if (arg.equalsIgnoreCase("headless")) {
+                        GlobalConstants.headless = true;
+                        continue;
+                    }
+                }
+
+                if (sceneToUse == null) {
+                    for (Scene scene : Scenes.allScenes) {
+                        if (arg.equals(scene.name())) {
+                            sceneToUse = scene;
+                            break;
+                        }
+                    }
                 }
             }
 
@@ -48,7 +67,34 @@ public class Main {
             }
 
             Logger.println("Survival game server");
-            levelInitializer = new LevelInitializer(new OnlineServerPacketSendEvents(), Scenes.beachScene);
+            Logger.println("Enter `stop` to terminate the server");
+
+            if (sceneToUse == null) {
+                promptSceneSelect(null);
+
+                while (sceneToUse == null) {
+                    Thread.sleep(100);
+                    ThreadManager.updateMain();
+
+                    if (shouldClose) {
+                        shutDownServerPrematurely();
+                        Logger.println("Server successfully closed");
+
+                        if (GlobalConstants.headless) {
+                            Headless.get().close();
+                        } else {
+                            if (Window.get().requestedClose) {
+                                Window.get().dispose();
+                            }
+                        }
+
+                        return;
+                    }
+                }
+            }
+
+            Logger.println(String.format("Scene `%s` selected", sceneToUse.name()));
+            levelInitializer = new LevelInitializer(new OnlineServerPacketSendEvents(), sceneToUse);
             Logger.println("Level initialized");
 
             try {
@@ -85,6 +131,16 @@ public class Main {
         }
     }
 
+    private static void shutDownServerPrematurely() {
+        everythingIsCompleted = true;
+
+        if (GlobalConstants.headless) {
+            Headless.get().makeNonEditable();
+        } else {
+            Window.get().makeNonEditable();
+        }
+    }
+
     private static void shutDownServer() {
         try {
             Server.get().disconnect();
@@ -111,6 +167,34 @@ public class Main {
         } else {
             Window.get().makeNonEditable();
         }
+    }
+
+    private static StringBuilder builder;
+
+    public static void promptSceneSelect(String invalidSceneName) {
+        if (builder == null) {
+            builder = new StringBuilder(200);
+            builder.append("Please enter one of ");
+
+            for (int i = 0; i < Scenes.allScenes.length; i++) {
+                Scene scene = Scenes.allScenes[i];
+                builder.append(String.format("`%s`", scene.name()));
+
+                if (i != Scenes.allScenes.length - 1) {
+                    builder.append(", ");
+                }
+            }
+        }
+
+        String firstMessage;
+        if (invalidSceneName == null) {
+            firstMessage = "A scene has not been selected";
+        } else {
+            firstMessage = String.format("`%s` is not a valid scene", invalidSceneName);
+        }
+
+        Logger.println(firstMessage);
+        Logger.println(builder.toString());
     }
 
 }

@@ -145,4 +145,6 @@ public class Scenes {
         }
     };
 
+    public static final Scene[] allScenes = { nothingScene, testScene, desertScene, beachScene, plainsScene };
+
 }
