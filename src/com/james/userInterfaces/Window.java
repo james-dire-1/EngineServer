@@ -1,4 +1,4 @@
-package com.james.window;
+package com.james.userInterfaces;
 
 import com.james.tools.ThreadManager;
 import game.main.Main;
@@ -54,6 +54,7 @@ public class Window {
         frame.add(new JScrollPane(messageHistory), BorderLayout.CENTER);
 
         this.typingArea = new JTextField();
+        typingArea.setEditable(true);
         typingArea.addActionListener(onInputReceived);
         frame.add(typingArea, BorderLayout.SOUTH);
 
@@ -66,6 +67,12 @@ public class Window {
     public void println(String message) {
         SwingUtilities.invokeLater(() -> {
             instance.messageHistory.append(message + "\n");
+        });
+    }
+
+    public void makeNonEditable() {
+        SwingUtilities.invokeLater(() -> {
+            typingArea.setEditable(false);
         });
     }
 

@@ -18,7 +18,7 @@ public class Server implements Runnable {
     private volatile boolean shouldRun = true;
 
     public Server(int port) throws IOException {
-        server = new ServerSocket(port, 100);
+        this.server = new ServerSocket(port, 100);
         new Thread(this).start();
 
         instance = this;

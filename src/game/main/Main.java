@@ -8,11 +8,12 @@ import com.james.common.tools.Logger;
 import com.james.serverSide.ServerThreadManager;
 import com.james.serverSide.simulation.Level;
 import com.james.tools.ThreadManager;
+import com.james.userInterfaces.Headless;
 import templates.common.GlobalConstants;
 import templates.communication.OnlineServerPacketSendEvents;
 import templates.communication.OnlineServerProperties;
 import com.james.networking.Server;
-import com.james.window.Window;
+import com.james.userInterfaces.Window;
 import templates.serverSide.Scenes;
 
 import java.io.IOException;
@@ -20,7 +21,7 @@ import java.io.IOException;
 public class Main {
 
     public static volatile boolean everythingIsCompleted = false;
-    public static boolean shouldClose = false;
+    public static volatile boolean shouldClose = false;
 
     private static final int PORT = 6789;
     private static LevelInitializer levelInitializer;
@@ -40,7 +41,9 @@ public class Main {
                 }
             }
 
-            if (!GlobalConstants.headless) {
+            if (GlobalConstants.headless) {
+                new Headless();
+            } else {
                 new Window("Survival Game Server", 500, 300);
             }
 
@@ -56,6 +59,7 @@ public class Main {
                 Logger.println("Server was unable to start with the following error:");
                 Logger.println(e.toString());
                 shutDownServer();
+                if (GlobalConstants.headless) Headless.get().close();
                 return;
             }
 
@@ -67,8 +71,12 @@ public class Main {
                     shutDownServer();
                     Logger.println("Server successfully closed");
 
-                    if (Window.get().requestedClose) {
-                        Window.get().dispose();
+                    if (GlobalConstants.headless) {
+                        Headless.get().close();
+                    } else {
+                        if (Window.get().requestedClose) {
+                            Window.get().dispose();
+                        }
                     }
                 }
             }
@@ -80,8 +88,10 @@ public class Main {
     private static void shutDownServer() {
         try {
             Server.get().disconnect();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (NullPointerException | IOException e) {
+            if (!(e instanceof NullPointerException)) {
+                e.printStackTrace();
+            }
         }
 
         levelInitializer.shouldRun = false;
@@ -95,6 +105,12 @@ public class Main {
         Level.clearNameToLevelMap();
         ServerThreadManager.clearEverything();
         everythingIsCompleted = true;
+
+        if (GlobalConstants.headless) {
+            Headless.get().makeNonEditable();
+        } else {
+            Window.get().makeNonEditable();
+        }
     }
 
 }
