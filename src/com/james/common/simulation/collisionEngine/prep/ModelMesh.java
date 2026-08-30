@@ -1,8 +1,7 @@
 package com.james.common.simulation.collisionEngine.prep;
 
 import com.james.common.simulation.collisionEngine.hitboxes.AbstractAABBHitbox;
-import com.james.common.simulation.collisionEngine.math.Triangle;
-import com.james.common.simulation.collisionEngine.prep.EllipsoidDimensions;
+import com.james.common.simulation.collisionEngine.math.objects.Triangle;
 import org.lwjgl.util.vector.Vector3f;
 
 /**

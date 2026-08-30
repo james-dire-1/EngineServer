@@ -5,6 +5,7 @@ import org.lwjgl.util.vector.Vector3f;
 /**
  * A representation of an object in 3D space.
  */
+// TODO: 2026-08-12 Some merging needs to be done between the two subclasses
 public abstract class AbstractPhysicalObject {
 
     protected final Vector3f position;

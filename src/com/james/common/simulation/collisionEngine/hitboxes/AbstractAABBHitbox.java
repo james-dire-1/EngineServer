@@ -18,9 +18,12 @@ public abstract class AbstractAABBHitbox {
     public final AbstractPhysicalObject object;
     public final String meshPath;
     public final int subMeshIdentifier;
-    private final ModelMesh mesh;
+    public final ModelMesh mesh;
 
     public float lowerX, upperX, lowerY, upperY, lowerZ, upperZ;
+
+    public boolean activeToEllipsoids = true;
+    public boolean activeToRays = true;
 
     /**
      * Creates a new AABB hitbox for a specific object (AbstractPhysicalObject), which uses a specific

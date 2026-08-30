@@ -1,4 +1,4 @@
-package com.james.common.simulation.collisionEngine.math;
+package com.james.common.simulation.collisionEngine.math.objects;
 
 import org.lwjgl.util.vector.Vector3f;
 

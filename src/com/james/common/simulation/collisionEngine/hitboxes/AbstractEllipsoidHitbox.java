@@ -3,6 +3,7 @@ package com.james.common.simulation.collisionEngine.hitboxes;
 import com.james.common.simulation.collisionEngine.prep.EllipsoidDimensions;
 import com.james.serverSide.simulation.collisionEngine.CollisionHandler;
 import com.james.serverSide.simulation.objects.MovableObject;
+import org.lwjgl.util.vector.Vector3f;
 
 /**
  * An ellipsoid hitbox used by players and moving entities to navigate world geometry that is represented
@@ -14,6 +15,8 @@ public abstract class AbstractEllipsoidHitbox {
 
     public final MovableObject movableObject;
     public final EllipsoidDimensions dimensions;
+
+    public boolean doBacktracking = false;
 
     /**
      * Creates a new ellipsoid hitbox of a given dimensions for a specific object. Note that the object
@@ -35,7 +38,7 @@ public abstract class AbstractEllipsoidHitbox {
      * @see CollisionHandler
      */
     public void enable() {
-        this.movableObject.isAffectedByAABBCollisions = true;
+        this.movableObject.canCollideWithTriangles = true;
     }
 
     /**
@@ -45,7 +48,7 @@ public abstract class AbstractEllipsoidHitbox {
      * @see CollisionHandler
      */
     public void disable() {
-        this.movableObject.isAffectedByAABBCollisions = false;
+        this.movableObject.canCollideWithTriangles = false;
     }
 
 }

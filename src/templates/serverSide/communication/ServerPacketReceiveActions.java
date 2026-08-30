@@ -1,5 +1,8 @@
 package templates.serverSide.communication;
 
+import com.james.serverSide.simulation.objects.VirtualDirectionalLight;
+import com.james.serverSide.simulation.objects.VirtualLight;
+import com.james.serverSide.simulation.collisionEngine.hitboxes.SphereHitbox;
 import templates.serverSide.PlayerInfo;
 import com.james.serverSide.simulation.Level;
 import com.james.serverSide.simulation.collisionEngine.hitboxes.AABBHitbox;
@@ -37,13 +40,12 @@ public class ServerPacketReceiveActions {
         startLevel.events.notifyUsernameSuccess(playerInfo, playerInfo.username, playerInfo.color, startLevel.primarySpawnPoint);
     }
 
-    // TODO: 2024-06-27 Make the server decide where the player should be placed initially
     public static void playerJoinedReceived(PlayerInfo playerInfo, float x, float y, float z, float rotY) {
         if (IS_NETWORK_DEBUG) println("ServerPacketReceiveActions.playerJoinedReceived");
 
         Level startLevel = Level.getFirstLevel();
         playerInfo.level = startLevel;
-        ConnectedPlayer connectedPlayer = new ConnectedPlayer(new Vector3f(x, y, z), new Vector3f(0, rotY, 0));
+        ConnectedPlayer connectedPlayer = new ConnectedPlayer(playerInfo, new Vector3f(x, y, z), new Vector3f(0, rotY, 0));
         startLevel.addConnectedPlayer(playerInfo, connectedPlayer);
 
         for (PhysicalObject obj : startLevel.getPhysicalObjects()) {
@@ -51,6 +53,15 @@ public class ServerPacketReceiveActions {
         }
         for (AABBHitbox aabbHitbox : startLevel.getAABBHitboxes()) {
             startLevel.events.sendAABBHitboxAdded(((PhysicalObject) aabbHitbox.object).id, aabbHitbox.meshPath, aabbHitbox.subMeshIdentifier, playerInfo);
+        }
+        for (SphereHitbox sphereHitbox : startLevel.getSphereHitboxes()) {
+            startLevel.events.sendSphereHitboxAdded(((PhysicalObject) sphereHitbox.object).id, sphereHitbox.radius, playerInfo);
+        }
+        for (VirtualLight virtualLight : startLevel.getVirtualLights()) {
+            startLevel.events.sendVirtualLightAddedToLevel(virtualLight.id, virtualLight.getPosition(), virtualLight.getColor(), virtualLight.getAttenuation(), playerInfo);
+        }
+        for (VirtualDirectionalLight virtualDirectionalLight : startLevel.getVirtualDirectionalLights()) {
+            startLevel.events.sendVirtualDirectionalLightAddedToLevel(virtualDirectionalLight.id, virtualDirectionalLight.getToLightDirection(), virtualDirectionalLight.getColor(), playerInfo);
         }
         for (PlayerInfo otherPlayerInfo : startLevel.getConnectedPlayersMap().keySet()) {
             ConnectedPlayer otherConnectedPlayer = otherPlayerInfo.getConnectedPlayer();
@@ -67,6 +78,7 @@ public class ServerPacketReceiveActions {
             float joinedRotY = connectedPlayer.getRotation().y;
             startLevel.events.sendConnectedPlayerAdded(connectedPlayer.id, playerInfo.username, playerInfo.color, joinedPosition.x, joinedPosition.y, joinedPosition.z, joinedRotY, otherPlayerInfo);
         }
+        startLevel.events.sendSkyboxChanged(startLevel.getSkyboxName(), startLevel.getSkyboxUnmoving(), playerInfo);
         startLevel.events.notifyThatLevelIsReady(playerInfo);
         startLevel.events.broadcastSystemMessage(playerInfo.username + " has joined the game");
     }

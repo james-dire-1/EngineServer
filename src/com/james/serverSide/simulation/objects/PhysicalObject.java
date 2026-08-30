@@ -18,8 +18,6 @@ public class PhysicalObject extends AbstractPhysicalObject {
     public Vector3f getRotation() { return rotation; }
     public float getScale() { return scale; }
 
-    private boolean shouldDelete = false;
-
     private static int count;
 
     public PhysicalObject(PhysicalObjectType type, Vector3f position, Vector3f rotation, float scale) {
@@ -30,20 +28,6 @@ public class PhysicalObject extends AbstractPhysicalObject {
 
         count++;
         this.id = count;
-    }
-
-    /**
-     * Basic update method for PhysicalObjects. As you can see, this method is pretty barebones, but classes
-     * that extend PhysicalObject (such as MovableObject) may have more complex overloaded update() methods.
-     * @see MovableObject
-     * @return whether the current PhysicalObject should be deleted.
-     */
-    public boolean update() {
-        return shouldDelete;
-    }
-
-    protected void markForDeletion() {
-        shouldDelete = true;
     }
 
     public void rotate(float x, float y, float z) {

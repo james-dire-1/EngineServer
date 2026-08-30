@@ -2,7 +2,7 @@ package com.james.common.simulation.collisionEngine.prep;
 
 import com.james.serverSide.simulation.collisionEngine.hitboxes.EllipsoidHitbox;
 import com.james.common.simulation.collisionEngine.math.PointOperations;
-import com.james.common.simulation.collisionEngine.math.Triangle;
+import com.james.common.simulation.collisionEngine.math.objects.Triangle;
 import org.lwjgl.util.vector.Vector3f;
 
 import java.util.ArrayList;

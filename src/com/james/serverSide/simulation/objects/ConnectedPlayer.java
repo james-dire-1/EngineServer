@@ -1,6 +1,7 @@
 package com.james.serverSide.simulation.objects;
 
 import org.lwjgl.util.vector.Vector3f;
+import templates.serverSide.PlayerInfo;
 
 /**
  * Represents a player object on the server-side.
@@ -9,6 +10,7 @@ import org.lwjgl.util.vector.Vector3f;
 public class ConnectedPlayer {
 
     public final int id;
+    public final PlayerInfo playerInfo;
 
     private final Vector3f position;
     private final Vector3f rotation;
@@ -18,7 +20,8 @@ public class ConnectedPlayer {
 
     private static int count;
 
-    public ConnectedPlayer(Vector3f position, Vector3f rotation) {
+    public ConnectedPlayer(PlayerInfo playerInfo, Vector3f position, Vector3f rotation) {
+        this.playerInfo = playerInfo;
         this.position = position;
         this.rotation = rotation;
 

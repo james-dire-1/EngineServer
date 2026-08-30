@@ -169,19 +169,19 @@ public class Main {
         }
     }
 
-    private static StringBuilder builder;
+    private static StringBuilder secondMessage;
 
     public static void promptSceneSelect(String invalidSceneName) {
-        if (builder == null) {
-            builder = new StringBuilder(200);
-            builder.append("Please enter one of ");
+        if (secondMessage == null) {
+            secondMessage = new StringBuilder(200);
+            secondMessage.append("Please enter one of ");
 
             for (int i = 0; i < Scenes.allScenes.length; i++) {
                 Scene scene = Scenes.allScenes[i];
-                builder.append(String.format("`%s`", scene.name()));
+                secondMessage.append(String.format("`%s`", scene.name()));
 
                 if (i != Scenes.allScenes.length - 1) {
-                    builder.append(", ");
+                    secondMessage.append(", ");
                 }
             }
         }
@@ -194,7 +194,7 @@ public class Main {
         }
 
         Logger.println(firstMessage);
-        Logger.println(builder.toString());
+        Logger.println(secondMessage.toString());
     }
 
 }

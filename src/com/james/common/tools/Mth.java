@@ -5,6 +5,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 public class Mth {
 
+    // TODO: 2026-08-14 A bunch of these methods should be optimized; we're creating new instances like crazy!
     public static Vector3f multiply(Vector3f vector, float a) {
         return new Vector3f(vector.x * a, vector.y * a, vector.z * a);
     }
@@ -37,6 +38,30 @@ public class Mth {
         float w2 = w2Numerator / w2Denominator;
 
         return w1 >= 0 && w2 >= 0 && w1+w2 <= 1;
+    }
+
+    public static Vector3f pitchAndYawToGLCartesianCoordinates(float rho, float pitch, float yaw, Vector3f dest) {
+        float theta = 180 - yaw;
+        float phi = 90 + pitch;
+        dest = sphericalToCartesianCoordinates(rho, theta, phi, dest);
+        dest.set(dest.y, dest.z, dest.x);
+
+        return dest;
+    }
+
+    public static Vector3f sphericalToCartesianCoordinates(float rho, float theta, float phi, Vector3f dest) {
+        double firstPart = rho * Math.sin(Math.toRadians(phi));
+        float x = (float) (firstPart * Math.cos(Math.toRadians(theta)));
+        float y = (float) (firstPart * Math.sin(Math.toRadians(theta)));
+        float z = (float) (rho * Math.cos(Math.toRadians(phi)));
+
+        if (dest == null) {
+            dest = new Vector3f(x, y, z);
+        } else {
+            dest.set(x, y, z);
+        }
+
+        return dest;
     }
 
 }
